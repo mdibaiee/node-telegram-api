@@ -1,14 +1,14 @@
 {
-  "name": "telegram-bots",
+  "name": "telegram-api",
   "version": "0.1.0",
-  "description": "Control Telegram bots easily",
+  "description": "Control Telegram bots easily using the new Telegram API",
   "main": "index.js",
   "scripts": {
     "test": "grunt test"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mdibaiee/node-telegram-bots"
+    "url": "https://github.com/mdibaiee/node-telegram-api"
   },
   "keywords": [
     "Telegram",
@@ -19,9 +19,9 @@
   "author": "Mahdi Dibaiee",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mdibaiee/node-telegram-bots/issues"
+    "url": "https://github.com/mdibaiee/node-telegram-api/issues"
   },
-  "homepage": "https://github.com/mdibaiee/node-telegram-bots",
+  "homepage": "https://github.com/mdibaiee/node-telegram-api",
   "dependencies": {
     "babel": "^5.6.8",
     "qs": "^3.1.0"
