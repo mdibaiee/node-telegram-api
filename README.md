@@ -1,34 +1,38 @@
 # Telegram Bots
-Control Telegram bots easily.
+Create and control [Telegram bots](https://core.telegram.org/bots) easily
+using the new [Telegram API](https://core.telegram.org/bots/api).
 
 ```
-npm install telegram-bots
+npm install telegram-api
 ```
 
 # Example
 ```javascript
-let Bot = require('telegram-bots');
+var Bot = require('./index');
 
-let smartBot = new Bot({
-  token: 'YOUR_TOKEN'
+var smartBot = new Bot({
+  token: 'YOUR_KEY'
 });
 
-// update is an Update object as described in Telegram Bots API documentation
-smartBot.on('Hi', update => {
-  const message = update.message,
-        id = message.chat.id;
+smartBot.start();
+
+// You can use regular expressions, too
+smartBot.get('Hi', function(update) {
+  const message = update.message;
+  const id = message.chat.id;
 
   const question = 'How should I greet you?',
         answers = ['Hi', 'Hello, Sir', 'Yo bro'];
 
   smartBot.askQuestion(id, question, answers)
   .then(answer => {
-    smartBot.message(id, `Your answer: ${answer}`);
+    smartBot.message(id, 'Your answer: ' + answer);
   }, () => {
     smartBot.message(id, 'Invalid answer');
   });
 });
 
+// Commands are in format `/command` or `/command@botusername` in groups
 smartBot.command('test', update => {
   const message = update.message;
   const id = message.chat.id;
@@ -39,6 +43,10 @@ smartBot.command('test', update => {
 smartBot.command('start', update => {
   smartBot.message(update.message.chat.id, 'Hello!');
 });
+
+// You can access all API methods through the api property until we implement
+// easier methods
+smartBot.api.getUserProfilePhotos
 ```
 
 This will result in:
