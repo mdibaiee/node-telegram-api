@@ -1,20 +1,7 @@
-# Telegram Bots
-Create and control [Telegram bots](https://core.telegram.org/bots) easily
-using the new [Telegram API](https://core.telegram.org/bots/api).
-
-```
-npm install telegram-api
-```
-
-# Example
-Take a look at [demo.js](https://github.com/mdibaiee/node-telegram-api/blob/master/demo.js).
-Also [@JavaScriptBot](https://telegram.me/JavaScriptBot), still work in progress.
-
-```javascript
-var Bot = require('telegram-api');
+var Bot = require('./index');
 
 var smartBot = new Bot({
-  token: 'YOUR_KEY'
+  token: '121143906:AAE6pcpBoARNZZjr3fUpvKuLInJ5Eee5Ajk'
 });
 
 // getMe is called before polling starts, setting info property of bot
@@ -27,8 +14,9 @@ smartBot.get('Hi', function(update) {
   const message = update.message;
   const id = message.chat.id;
 
+  // answers is in format of keyboard rows
   const question = 'How should I greet you?',
-        answers = ['Hi', 'Hello, Sir', 'Yo bro'];
+        answers = [['Hi'], ['Hello, Sir'], ['Yo bro']];
 
   smartBot.replyTo(message.message_id).askQuestion(id, question, answers)
   .then(answer => {
@@ -49,12 +37,3 @@ smartBot.command('test', update => {
 smartBot.command('start', update => {
   smartBot.message(update.message.chat.id, 'Hello!');
 });
-
-// You can access all API methods through the api property until we implement
-// easier methods
-smartBot.api.getUserProfilePhotos
-```
-
-This will result in:
-
-![@JavaScriptBot](https://github.com/mdibaiee/node-telegram-api/raw/master/demo.gif)
