@@ -8,7 +8,7 @@ npm install telegram-api
 
 # Example
 ```javascript
-var Bot = require('./index');
+var Bot = require('telegram-api');
 
 var smartBot = new Bot({
   token: 'YOUR_KEY'
@@ -24,7 +24,7 @@ smartBot.get('Hi', function(update) {
   const question = 'How should I greet you?',
         answers = ['Hi', 'Hello, Sir', 'Yo bro'];
 
-  smartBot.askQuestion(id, question, answers)
+  smartBot.replyTo(message.message_id).askQuestion(id, question, answers)
   .then(answer => {
     smartBot.message(id, 'Your answer: ' + answer);
   }, () => {
