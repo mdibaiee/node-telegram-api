@@ -2,6 +2,8 @@
 Create and control [Telegram bots](https://core.telegram.org/bots) easily
 using the new [Telegram API](https://core.telegram.org/bots/api).
 
+telegram-api is in beta, your feedback is highly appreciated, please fill an issue
+for any bugs you find or any suggestions you have.
 ```
 npm install telegram-api
 ```
