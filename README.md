@@ -27,8 +27,9 @@ smartBot.get('Hi', function(update) {
   const message = update.message;
   const id = message.chat.id;
 
+  // answers is in format of keyboard rows
   const question = 'How should I greet you?',
-        answers = ['Hi', 'Hello, Sir', 'Yo bro'];
+        answers = [['Hi'], ['Hello, Sir'], ['Yo bro']];
 
   smartBot.replyTo(message.message_id).askQuestion(id, question, answers)
   .then(answer => {
@@ -49,7 +50,6 @@ smartBot.command('test', update => {
 smartBot.command('start', update => {
   smartBot.message(update.message.chat.id, 'Hello!');
 });
-
 // You can access all API methods through the api property until we implement
 // easier methods
 smartBot.api.getUserProfilePhotos
