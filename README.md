@@ -33,7 +33,8 @@ smartBot.get('Hi', function(update) {
   const question = 'How should I greet you?',
         answers = [['Hi'], ['Hello, Sir'], ['Yo bro']];
 
-  smartBot.replyTo(message.message_id).askQuestion(id, question, answers)
+  smartBot.replyTo(message.message_id)
+  .askQuestion(id, question, answers)
   .then(answer => {
     smartBot.message(id, 'Your answer: ' + answer);
   }, () => {
