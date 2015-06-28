@@ -1,7 +1,15 @@
 var Bot = require('./index');
+var Message = require('./lib/classes/Message');
+var Question = require('./lib/classes/Question');
+
+process.on('uncaughtException', function (err) {
+  console.error((new Date()).toUTCString() + ' uncaughtException:', err.message);
+  console.error(err.stack);
+  process.exit(1);
+});
 
 var smartBot = new Bot({
-  token: 'YOUR_KEY'
+  token: '121143906:AAE6pcpBoARNZZjr3fUpvKuLInJ5Eee5Ajk'
 });
 
 // getMe is called before polling starts, setting info property of bot
@@ -14,16 +22,17 @@ smartBot.get('Hi', function(update) {
   const message = update.message;
   const id = message.chat.id;
 
-  // answers is in format of keyboard rows
-  const question = 'How should I greet you?',
-        answers = [['Hi'], ['Hello, Sir'], ['Yo bro']];
+  var question = new Question().to(id)
+                               .text('How should I greet you?')
+                               .answers([['Hi'], ['Hello, Sir'], ['Yo bro']])
+                               .reply(message.message_id);
 
-  smartBot.replyTo(message.message_id)
-  .askQuestion(id, question, answers)
-  .then(answer => {
-    smartBot.message(id, 'Your answer: ' + answer);
+  smartBot.send(question).then(answer => {
+    const msg = new Message().to(id).text('Your answer: ' + answer);
+    smartBot.send(msg);
   }, () => {
-    smartBot.message(id, 'Invalid answer');
+    const msg = new Message().to(id).text('Invalid answer');
+    smartBot.send(msg);
   });
 });
 
@@ -32,9 +41,14 @@ smartBot.command('test', update => {
   const message = update.message;
   const id = message.chat.id;
 
-  smartBot.message(id, 'Test command');
+  // options object => Telegram API
+  smartBot.send(new Message({
+    chat_id: id,
+    text: 'Test Command'
+  }));
 });
 
 smartBot.command('start', update => {
-  smartBot.message(update.message.chat.id, 'Hello!');
+  // chainable methods => easier
+  smartBot.send(new Message().to(update.message.chat.id).text('Hello'));
 });
