@@ -5,7 +5,7 @@ var Message = require('telegram-api/types/Message');
 var Question = require('telegram-api/types/Question');
 
 var smartBot = new Bot({
-  token: '121143906:AAE6pcpBoARNZZjr3fUpvKuLInJ5Eee5Ajk'
+  token: 'YOUR_KEY'
 });
 
 // getMe is called before polling starts, setting info property of bot
