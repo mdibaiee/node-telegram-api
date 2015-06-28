@@ -81,10 +81,10 @@ This will result in:
 
 # Todo
 
--[] BulkMessage Type
--[] File Type
--[] Sticker Type
--[] Location Type
--[] Contact Type
--[] Allow remote control of bots (TCP maybe)
-YOUR IDEAS! [Fill an issue](https://github.com/mdibaiee/node-telegram-api/issues)
+- [ ] BulkMessage Type
+- [ ] File Type
+- [ ] Sticker Type
+- [ ] Location Type
+- [ ] Contact Type
+- [ ] Allow remote control of bots (TCP maybe)
+- YOUR IDEAS! [Fill an issue](https://github.com/mdibaiee/node-telegram-api/issues)
