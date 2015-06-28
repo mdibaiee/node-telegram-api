@@ -99,7 +99,6 @@ var Bot = (function (_EventEmitter) {
             _this.update.offset += 1;
           }
 
-          _this.emit('update', response.result);
           result.forEach(function (res) {
             var text = res.message.text;
             if (text.startsWith('/')) {
@@ -112,8 +111,10 @@ var Bot = (function (_EventEmitter) {
               var pattern = _ref.pattern;
               return pattern.test(text);
             });
-            ev.listener(res);
+            ev.listener(res.message);
           });
+
+          _this.emit('update', result);
         });
       }).bind(this);
 

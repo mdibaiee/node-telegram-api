@@ -80,8 +80,7 @@ var Question = (function (_Message) {
       var answers = this.answers;
 
       return new Promise(function (resolve, reject) {
-        _get(Object.getPrototypeOf(Question.prototype), 'send', _this).call(_this, bot).then(function (update) {
-          var message = update.message;
+        _get(Object.getPrototypeOf(Question.prototype), 'send', _this).call(_this, bot).then(function (message) {
           var answer = undefined;
 
           answers.forEach(function find(a) {

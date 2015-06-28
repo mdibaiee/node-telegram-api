@@ -111,6 +111,8 @@ var Message = (function (_Base) {
     value: function send(bot) {
       var _this = this;
 
+      console.log('sending message');
+
       var messageId = undefined;
       var reply_markup = JSON.stringify(this._keyboard.getProperties());
       this.properties.reply_markup = reply_markup;
