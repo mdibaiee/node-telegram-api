@@ -1,12 +1,8 @@
-var Bot = require('./index');
-var Message = require('./lib/classes/Message');
-var Question = require('./lib/classes/Question');
+var Bot = require('telegram-api');
 
-process.on('uncaughtException', function (err) {
-  console.error((new Date()).toUTCString() + ' uncaughtException:', err.message);
-  console.error(err.stack);
-  process.exit(1);
-});
+// only require the message types you need, more coming soon!
+var Message = require('telegram-api/types/Message');
+var Question = require('telegram-api/types/Question');
 
 var smartBot = new Bot({
   token: '121143906:AAE6pcpBoARNZZjr3fUpvKuLInJ5Eee5Ajk'
@@ -17,16 +13,24 @@ smartBot.start().then(() => {
   console.log(smartBot.info);
 });
 
-// You can use regular expressions, too
-smartBot.get('Hi', function(update) {
+// Create a new question
+// answers is a keyboard layout as defined in Telegram API
+// we're going to reuse this by modifying it's target
+const question = new Question()
+  .text('How should I greet you?')
+  .answers([['Hey'], ['Hello, Sir'], ['Yo bro']]);
+
+// Called when a message starting with Hi is received
+// You can use Regular Expressions, too
+// update is an Update object as defined in Telegram API
+smartBot.get('Hi', update => {
   const message = update.message;
   const id = message.chat.id;
 
-  var question = new Question().to(id)
-                               .text('How should I greet you?')
-                               .answers([['Hi'], ['Hello, Sir'], ['Yo bro']])
-                               .reply(message.message_id);
+  question.to(id).reply(message.message_id);
 
+  // Send the question, returns a promise, resolves on valid answer,
+  // rejects in case of an invalid answer
   smartBot.send(question).then(answer => {
     const msg = new Message().to(id).text('Your answer: ' + answer);
     smartBot.send(msg);
@@ -36,19 +40,16 @@ smartBot.get('Hi', function(update) {
   });
 });
 
-// Commands are in format `/command` or `/command@botusername` in groups
+// Commands are in the format `/command` or `/command@botusername` in groups
+const test = new Message().text('Test Command');
 smartBot.command('test', update => {
   const message = update.message;
   const id = message.chat.id;
 
-  // options object => Telegram API
-  smartBot.send(new Message({
-    chat_id: id,
-    text: 'Test Command'
-  }));
+  smartBot.send(test.to(id));
 });
 
+const hello = new Message().text('Hello');
 smartBot.command('start', update => {
-  // chainable methods => easier
-  smartBot.send(new Message().to(update.message.chat.id).text('Hello'));
+  smartBot.send(hello.to(update.message.chat.id));
 });

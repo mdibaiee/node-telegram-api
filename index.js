@@ -1,2 +1,2 @@
-require('babel/register');
-module.exports = require('./lib/index');
+require('babel/polyfill');
+module.exports = require('./build/');
