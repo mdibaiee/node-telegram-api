@@ -38,7 +38,7 @@ const question = new Question({
   answers: [['Hey'], ['Hello, Sir'], ['Yo bro']]
 });
 
-bot.get(/Hi|Hey|Yo/, message => {
+bot.get(/Hi\sBot/, message => {
   const id = message.chat.id;
 
   question.to(id).reply(message.message_id);
