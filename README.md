@@ -8,6 +8,8 @@ for any bugs you find or any suggestions you have.
 npm install telegram-api
 ```
 
+The code is well documented. I'm trying to integrate JSDoc / ESDoc into our repository for an easy to access documentation.
+
 # Example
 Take a look at [demo.js](https://github.com/mdibaiee/node-telegram-api/blob/master/demo.js).
 
@@ -87,4 +89,4 @@ This will result in:
 - [ ] Location Type
 - [ ] Contact Type
 - [ ] Allow remote control of bots (TCP maybe)
-- YOUR IDEAS! [Fill an issue](https://github.com/mdibaiee/node-telegram-api/issues)
+- [ ] YOUR IDEAS! [Fill an issue](https://github.com/mdibaiee/node-telegram-api/issues)
