@@ -20,6 +20,14 @@ var _api = require('./api');
 
 var _api2 = _interopRequireDefault(_api);
 
+var _webhook = require('./webhook');
+
+var _webhook2 = _interopRequireDefault(_webhook);
+
+var _poll = require('./poll');
+
+var _poll2 = _interopRequireDefault(_poll);
+
 var _events = require('events');
 
 var DEFAULTS = {
@@ -75,62 +83,38 @@ var Bot = (function (_EventEmitter) {
     key: 'start',
 
     /**
-     * Gets information about the bot and then starts polling updates from API
+     * Gets information about the bot and then
+     * 1) starts polling updates from API
+     * 2) sets a webhook as defined by the first parameter and listens for updates
      * Emits an `update` event after polling with the response from server
      * Returns a promise which is resolved after the bot information is received
      * and set to it's `info` property i.e. bot.info
+     *
+     * @param {object} hook An object containg options passed to webhook
+     *                      properties:
+     *                       - url: HTTPS url to listen on POST requests coming
+     *                              from the Telegram API
+     *                       - port: the port to listen to, defaults to 443
+     *                       - server: An object passed to https.createServer
+     *
      * @return {promise} A promise which is resolved with the response of getMe
      */
-    value: function start() {
-      var _this2 = this;
+    value: function start(hook) {
+      var _this = this;
 
-      var poll = (function () {
-        var _this = this;
-
-        return this.api.getUpdates(this.update).then(function (response) {
-          var again = wait(_this.update.timeout * 1000).then(poll);
-
-          var result = response.result;
-          if (!result.length) {
-            return again;
-          }
-
-          if (!_this.update.offset) {
-            var updateId = result[result.length - 1].update_id;
-            _this.update.offset = updateId;
-          }
-          if (_this.update) {
-            _this.update.offset += 1;
-          }
-
-          _this.emit('update', result);
-
-          result.forEach(function (res) {
-            var text = res.message.text;
-            if (text.startsWith('/')) {
-              // Commands are sent in /command@botusername format in groups
-              var regex = new RegExp('@' + _this.info.username + '$');
-              text = text.replace(regex, '');
-            }
-
-            var ev = _this._userEvents.find(function (_ref) {
-              var pattern = _ref.pattern;
-              return pattern.test(text);
-            });
-
-            if (!ev) {
-              return;
-            }
-            ev.listener(res.message);
-          });
-
-          return again;
-        });
-      }).bind(this);
-
+      if (hook) {
+        return (0, _webhook2['default'])(hook, this);
+      }
       return this.api.getMe().then(function (response) {
-        _this2.info = response.result;
-        return poll();
+        _this.info = response.result;
+
+        _this.on('update', _this._update);
+
+        if (hook) {
+          return (0, _webhook2['default'])(hook, _this);
+        } else {
+          return (0, _poll2['default'])(_this);
+        }
       });
     }
   }, {
@@ -186,16 +170,42 @@ var Bot = (function (_EventEmitter) {
     value: function send(message) {
       return message.send(this)['catch'](console.error);
     }
+  }, {
+    key: '_update',
+    value: function _update(update) {
+      var _this2 = this;
+
+      if (!this.update.offset) {
+        var updateId = update[update.length - 1].update_id;
+        this.update.offset = updateId;
+      }
+      if (this.update) {
+        this.update.offset += 1;
+      }
+
+      update.forEach(function (res) {
+        var text = res.message.text;
+        if (text.startsWith('/')) {
+          // Commands are sent in /command@thisusername format in groups
+          var regex = new RegExp('@' + _this2.info.username + '$');
+          text = text.replace(regex, '');
+        }
+
+        var ev = _this2._userEvents.find(function (_ref) {
+          var pattern = _ref.pattern;
+          return pattern.test(text);
+        });
+
+        if (!ev) {
+          return;
+        }
+        ev.listener(res.message);
+      });
+    }
   }]);
 
   return Bot;
 })(_events.EventEmitter);
 
 exports['default'] = Bot;
-
-var wait = function wait(miliseconds) {
-  return new Promise(function (resolve) {
-    setTimeout(resolve, miliseconds);
-  });
-};
 module.exports = exports['default'];

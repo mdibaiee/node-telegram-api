@@ -4,6 +4,7 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 exports['default'] = fetch;
+exports.getBody = getBody;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -19,8 +20,6 @@ function fetch(path, data) {
   var post = _qs2['default'].stringify(data);
 
   return new Promise(function (resolve, reject) {
-    var res = '';
-
     var req = _https2['default'].request({
       hostname: 'api.telegram.org',
       method: data ? 'POST' : 'GET',
@@ -29,19 +28,15 @@ function fetch(path, data) {
         'Content-Type': 'application/x-www-form-urlencoded'
       }
     }, function (response) {
-      response.on('data', function (chunk) {
-        res += chunk;
-      });
-
-      response.on('end', function () {
+      return getBody(response).then(function (res) {
         try {
           var json = JSON.parse(res);
           resolve(json);
         } catch (e) {
           reject(e);
         }
-      });
-    }).on('error', reject);
+      })['catch'](reject);
+    });
 
     if (post) {
       req.write(post);
@@ -52,4 +47,18 @@ function fetch(path, data) {
   });
 }
 
-module.exports = exports['default'];
+function getBody(stream) {
+  var data = '';
+
+  return new Promise(function (resolve, reject) {
+    stream.on('data', function (chunk) {
+      data += chunk;
+    });
+
+    stream.on('end', function () {
+      resolve(data);
+    });
+
+    stream.on('error', reject);
+  });
+}

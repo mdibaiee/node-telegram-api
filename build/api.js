@@ -39,7 +39,7 @@ API.prototype.request = function request(method, data) {
   return (0, _fetch2['default'])(this.token + '/' + method, data);
 };
 
-var methods = ['getMe', 'sendMessage', 'forwardMessage', 'sendPhoto', 'sendAudio', 'sendDocument', 'sendSticker', 'sendVideo', 'sendLocation', 'sendChatAction', 'getUserProfilePhotos', 'getUpdates'];
+var methods = ['getMe', 'sendMessage', 'forwardMessage', 'sendPhoto', 'sendAudio', 'sendDocument', 'sendSticker', 'sendVideo', 'sendLocation', 'sendChatAction', 'getUserProfilePhotos', 'getUpdates', 'setWebhook'];
 
 methods.forEach(function (method) {
   API.prototype[method] = function (data) {
