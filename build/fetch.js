@@ -47,7 +47,9 @@ function fetch(path, data) {
       req.write(post);
     }
     req.end();
-  })['catch'](console.error);
+  })['catch'](function (err) {
+    console.error('Error sending request', err);
+  });
 }
 
 module.exports = exports['default'];

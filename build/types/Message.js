@@ -148,7 +148,7 @@ var Message = (function (_Base) {
             bot.removeListener('update', listener);
           }
         });
-      })['catch'](console.error);
+      });
     }
   }]);
 

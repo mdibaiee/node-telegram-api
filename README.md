@@ -24,8 +24,8 @@ var bot = new Bot({
   token: 'YOUR_KEY'
 });
 
-bot.start().then(() => {
-  console.log(bot.info);
+bot.start().catch(err => {
+  console.error(err, '\n', err.stack);
 });
 
 // polling
@@ -44,7 +44,7 @@ bot.get(/Hi\sBot/, message => {
   question.to(id).reply(message.message_id);
 
   bot.send(question).then(answer => {
-    const msg = new Message().to(id).text('Your answer: ' + answer);
+    const msg = new Message().to(id).text('Your answer: ' + answer.text);
     bot.send(msg);
   }, () => {
     const msg = new Message().to(id).text('Invalid answer');
