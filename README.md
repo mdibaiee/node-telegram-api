@@ -10,6 +10,18 @@ npm install telegram-api
 
 The code is well documented. I'm trying to integrate JSDoc / ESDoc into our repository for an easy to access documentation.
 
+All Telegram API methods are accessible through `api` property of bots.
+
+```javascript
+bot.api.sendPhoto({
+  chat_id: 99999,
+  photo: 'some_id',
+  caption: 'dancing monkey'
+});
+```
+
+Some API methods have been simplified using what we call *types*. See the example below.
+
 # Example
 [@JavaScriptBot](https://telegram.me/JavaScriptBot) runs on `demo.js`, you can test it.
 
