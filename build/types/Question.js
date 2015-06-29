@@ -42,8 +42,10 @@ var Question = (function (_Message) {
 
     _get(Object.getPrototypeOf(Question.prototype), 'constructor', this).call(this, options);
 
-    var kb = new _Keyboard2['default']().force().oneTime().selective().keys(this.properties.answers);
+    var kb = new _Keyboard2['default']().force().oneTime().selective();
     this.keyboard(kb);
+
+    this.answers(options.answers);
   }
 
   _inherits(Question, _Message);
@@ -58,7 +60,7 @@ var Question = (function (_Message) {
      * @return {object} returns the question object
      */
     value: function answers(_answers) {
-      this.answers = _answers;
+      this._answers = _answers;
       this._keyboard.keys(_answers);
       return this;
     }
@@ -77,29 +79,27 @@ var Question = (function (_Message) {
     value: function send(bot) {
       var _this = this;
 
-      var answers = this.answers;
+      var answers = this._answers;
 
-      return new Promise(function (resolve, reject) {
-        _get(Object.getPrototypeOf(Question.prototype), 'send', _this).call(_this, bot).then(function (message) {
-          var answer = undefined;
+      return _get(Object.getPrototypeOf(Question.prototype), 'send', this).call(this, bot).then(function (message) {
+        var answer = undefined;
 
-          answers.forEach(function find(a) {
-            if (Array.isArray(a)) {
-              a.forEach(find);
-            }
-            if (a === message.text) {
-              answer = a;
-            }
-          });
-
-          if (answer) {
-            resolve(answer, update);
-            _this.emit('question:answer', answer, update);
-          } else {
-            reject(update);
-            _this.emit('question:invalid', update);
+        answers.forEach(function find(a) {
+          if (Array.isArray(a)) {
+            a.forEach(find);
+          }
+          if (a === message.text) {
+            answer = a;
           }
         });
+
+        if (answer) {
+          _this.emit('question:answer', answer, message);
+          return message;
+        } else {
+          _this.emit('question:invalid', message);
+          throw update;
+        }
       });
     }
   }]);

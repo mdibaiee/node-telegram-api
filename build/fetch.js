@@ -47,7 +47,7 @@ function fetch(path, data) {
       req.write(post);
     }
     req.end();
-  });
+  })['catch'](console.error);
 }
 
 module.exports = exports['default'];

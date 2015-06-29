@@ -30,6 +30,10 @@ var DEFAULTS = {
   }
 };
 
+process.on('uncaughtException', function (err) {
+  console.error(err.stack);
+});
+
 /**
  * Bot class used to connect to a new bot
  * Bots have an api property which gives access to all Telegram API methods,
@@ -83,12 +87,12 @@ var Bot = (function (_EventEmitter) {
       var poll = (function () {
         var _this = this;
 
-        this.api.getUpdates(this.update).then(function (response) {
-          setTimeout(poll, _this.update.timeout * 1000);
+        return this.api.getUpdates(this.update).then(function (response) {
+          var again = wait(_this.update.timeout * 1000).then(poll);
 
           var result = response.result;
           if (!result.length) {
-            return;
+            return again;
           }
 
           if (!_this.update.offset) {
@@ -98,6 +102,8 @@ var Bot = (function (_EventEmitter) {
           if (_this.update) {
             _this.update.offset += 1;
           }
+
+          _this.emit('update', result);
 
           result.forEach(function (res) {
             var text = res.message.text;
@@ -111,16 +117,20 @@ var Bot = (function (_EventEmitter) {
               var pattern = _ref.pattern;
               return pattern.test(text);
             });
+
+            if (!ev) {
+              return;
+            }
             ev.listener(res.message);
           });
 
-          _this.emit('update', result);
+          return again;
         });
       }).bind(this);
 
       return this.api.getMe().then(function (response) {
         _this2.info = response.result;
-        poll();
+        return poll();
       });
     }
   }, {
@@ -174,7 +184,7 @@ var Bot = (function (_EventEmitter) {
      * @return {unknown} returns the result of calling message's send method
      */
     value: function send(message) {
-      return message.send(this);
+      return message.send(this)['catch'](console.error);
     }
   }]);
 
@@ -182,4 +192,10 @@ var Bot = (function (_EventEmitter) {
 })(_events.EventEmitter);
 
 exports['default'] = Bot;
+
+var wait = function wait(miliseconds) {
+  return new Promise(function (resolve) {
+    setTimeout(resolve, miliseconds);
+  });
+};
 module.exports = exports['default'];

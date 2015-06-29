@@ -134,20 +134,21 @@ var Message = (function (_Base) {
 
             // if in a group, there will be a reply to this message
             if (chat < 0) {
-              return message.chat.id === chat && message.reply_to_message.message_id === messageId;
+              return message.chat.id === chat && message.reply_to_message && message.reply_to_message.message_id === messageId;
             } else {
               return message.chat.id === chat;
             }
           });
 
           if (update) {
-            resolve(update);
-            this.emit('message:answer', update);
+            resolve(update.message);
+
+            this.emit('message:answer', update.message);
 
             bot.removeListener('update', listener);
           }
         });
-      });
+      })['catch'](console.error);
     }
   }]);
 
