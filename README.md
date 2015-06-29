@@ -73,6 +73,7 @@ This will result in:
 
 # Todo
 
+- [x] Webhook support
 - [ ] BulkMessage Type
 - [ ] File Type
 - [ ] Sticker Type
