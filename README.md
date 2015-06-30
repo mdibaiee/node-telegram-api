@@ -90,6 +90,7 @@ This will result in:
 # Todo
 
 - [x] Webhook support
+- [x] Forward Type
 - [ ] BulkMessage Type
 - [ ] File Type
 - [ ] Sticker Type

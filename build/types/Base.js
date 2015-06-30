@@ -19,16 +19,77 @@ var _events = require('events');
  */
 
 var Base = (function (_EventEmitter) {
-  function Base() {
+  function Base(method) {
     _classCallCheck(this, Base);
 
     _get(Object.getPrototypeOf(Base.prototype), 'constructor', this).call(this);
+
+    this.method = method;
     this.properties = {};
   }
 
   _inherits(Base, _EventEmitter);
 
   _createClass(Base, [{
+    key: 'send',
+
+    /**
+     * Sends the message, you should only use this method yourself if
+     * you are extending this class. Normally you should call bot.send(message)
+     *
+     * Events: message:sent => Emitted after sending the message to API, gets the
+     * 												  API's response
+     *
+     *			message:answer => Emitted when your message gets an answer from
+     *				                 the contact (reply in case of groups)
+     *				                 gets the Update object containing message
+     *
+     * @param  {object} bot
+     * @return {promise} returns a promise, resolved with message:answer
+     */
+    value: function send(bot) {
+      var _this = this;
+
+      if (this._keyboard) {
+        var reply_markup = JSON.stringify(this._keyboard.getProperties());
+        this.properties.reply_markup = reply_markup;
+      }
+
+      var messageId = undefined;
+      return new Promise(function (resolve) {
+        bot.api[_this.method](_this.properties).then(function (response) {
+          messageId = response.result.message_id;
+          _this.emit('message:sent', response);
+        });
+
+        if (_this._keyboard.one_time_keyboard) {
+          _this._keyboard.replyMarkup = '';
+        }
+
+        var chat = _this.properties.chat_id;
+        bot.on('update', function listener(result) {
+          var update = result.find(function (_ref) {
+            var message = _ref.message;
+
+            // if in a group, there will be a reply to this message
+            if (chat < 0) {
+              return message.chat.id === chat && message.reply_to_message && message.reply_to_message.message_id === messageId;
+            } else {
+              return message.chat.id === chat;
+            }
+          });
+
+          if (update) {
+            resolve(update.message);
+
+            this.emit('message:answer', update.message);
+
+            bot.removeListener('update', listener);
+          }
+        });
+      });
+    }
+  }, {
     key: 'getProperties',
 
     /**

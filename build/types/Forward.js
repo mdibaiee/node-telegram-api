@@ -19,29 +19,30 @@ var _Base2 = require('./Base');
 var _Base3 = _interopRequireDefault(_Base2);
 
 /**
- * Message class, used to send message to a chat
+ * Forward class, used to forward messages from a chat to another
  */
 
-var Message = (function (_Base) {
+var Forward = (function (_Base) {
   /**
-   * Create a new message
-   * @param  {object} properties Message properties, as defined by Telegram API
+   * Create a new forward message
+   * @param  {object} properties Forward Message properties, as defined by
+   *                             Telegram API
    */
 
-  function Message() {
+  function Forward() {
     var properties = arguments[0] === undefined ? {} : arguments[0];
 
-    _classCallCheck(this, Message);
+    _classCallCheck(this, Forward);
 
-    _get(Object.getPrototypeOf(Message.prototype), 'constructor', this).call(this, 'sendMessage');
+    _get(Object.getPrototypeOf(Forward.prototype), 'constructor', this).call(this, 'forwardMessage');
 
     this.properties = properties;
     this._keyboard = new _Base3['default']();
   }
 
-  _inherits(Message, _Base);
+  _inherits(Forward, _Base);
 
-  _createClass(Message, [{
+  _createClass(Forward, [{
     key: 'to',
 
     /**
@@ -54,27 +55,27 @@ var Message = (function (_Base) {
       return this;
     }
   }, {
-    key: 'text',
+    key: 'from',
 
     /**
-     * Set text of the message
-     * @param  {string} text Message's content
+     * Set from_chat_id, source of message's chat's id
+     * @param  {number} chat Source chat id
      * @return {object} returns the message object
      */
-    value: function text(_text) {
-      this.properties.text = _text;
+    value: function from(chat) {
+      this.properties.from_chat_id = chat;
       return this;
     }
   }, {
-    key: 'reply',
+    key: 'message',
 
     /**
-     * Set reply_to_message_id of the message
-     * @param  {number} id message_id of the message to reply to
+     * Sets message_id, the message to forward from source to target chat
+     * @param  {number} message ID of the message to forward
      * @return {object} returns the message object
      */
-    value: function reply(id) {
-      this.properties.reply_to_message_id = id;
+    value: function message(_message) {
+      this.properties.message_id = _message;
       return this;
     }
   }, {
@@ -96,8 +97,8 @@ var Message = (function (_Base) {
 
   }]);
 
-  return Message;
+  return Forward;
 })(_Base3['default']);
 
-exports['default'] = Message;
+exports['default'] = Forward;
 module.exports = exports['default'];

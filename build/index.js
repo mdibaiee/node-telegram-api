@@ -172,6 +172,13 @@ var Bot = (function (_EventEmitter) {
     }
   }, {
     key: '_update',
+
+    /**
+     * The internal update event listener, used to parse messages and fire
+     * command/get events - YOU SHOULD NOT USE THIS
+     *
+     * @param  {object} update
+     */
     value: function _update(update) {
       var _this2 = this;
 
