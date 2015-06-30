@@ -8,7 +8,11 @@ for any bugs you find or any suggestions you have.
 npm install telegram-api
 ```
 
+If you are cloning this repository, remember to run `npm install` to install dependencies.
+
 The code is well documented. I'm trying to integrate JSDoc / ESDoc into our repository for an easy to access documentation.
+
+---
 
 All Telegram API methods are accessible through `api` property of bots.
 
