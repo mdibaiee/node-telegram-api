@@ -14,6 +14,16 @@ The code is well documented. I'm trying to integrate JSDoc / ESDoc into our repo
 
 ---
 
+If you are using `babel/polyfill` and you get an error requiring this modules, try:
+
+```javascript
+require('telegram-api/build');
+```
+
+This will bypass the `babel/polyfill` required by the module.
+
+---
+
 All Telegram API methods are accessible through `api` property of bots.
 
 ```javascript
