@@ -4,6 +4,8 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
+var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
+
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
@@ -22,6 +24,18 @@ var _mime = require('mime');
 
 var _mime2 = _interopRequireDefault(_mime);
 
+var _fs = require('fs');
+
+var _fs2 = _interopRequireDefault(_fs);
+
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
+var _restler = require('restler');
+
+var _restler2 = _interopRequireDefault(_restler);
+
 var TYPES = ['photo', 'video', 'document', 'audio'];
 
 /**
@@ -39,7 +53,7 @@ var File = (function (_Base) {
 
     _classCallCheck(this, File);
 
-    _get(Object.getPrototypeOf(File.prototype), 'constructor', this).call(this, 'sendMessage');
+    _get(Object.getPrototypeOf(File.prototype), 'constructor', this).call(this, 'sendDocument');
 
     this.properties = properties;
     this._keyboard = new _Base3['default']();
@@ -64,26 +78,43 @@ var File = (function (_Base) {
 
     /**
      * Set file of the message
-     * @param  {ReadableStream} stream File Stream
+     * @param  {string} file File path
      * @param {string} fileType (optional) if the first argument is a
      *                          file_id string, this option indicates file type
      * @return {object} returns the message object
      */
-    value: function file(stream, fileType) {
-      if (typeof stream === 'string') {
-        this.properties[fileType] = stream;
+    value: function file(_file, fileType) {
+      if (fileType) {
+        this.properties[fileType] = _file;
+
+        return this;
       }
 
-      var type = _mime2['default'].lookup(stream.path).split('/')[0];
+      var stat = _fs2['default'].statSync(_file);
+      var name = _path2['default'].basename(_file);
+
+      var _mime$lookup$split = _mime2['default'].lookup(_file).split('/');
+
+      var _mime$lookup$split2 = _slicedToArray(_mime$lookup$split, 2);
+
+      var type = _mime$lookup$split2[0];
+      var extension = _mime$lookup$split2[1];
+
       if (type === 'image') {
         type = 'photo';
+      }
+
+      if (extension === 'gif') {
+        type = 'document';
       }
 
       if (TYPES.indexOf(type) === -1) {
         type = 'document';
       }
 
-      this.properties[type] = stream;
+      this.properties[type] = _restler2['default'].file(_file, name, stat.size, 'utf-8');
+
+      this.method = 'send' + (type[0].toUpperCase() + type.slice(1));
 
       return this;
     }

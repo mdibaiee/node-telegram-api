@@ -102,7 +102,7 @@ This will result in:
 - [x] Webhook support
 - [x] Forward Type
 - [ ] BulkMessage Type
-- [ ] File Type
+- [x] File Type
 - [ ] Sticker Type
 - [ ] Location Type
 - [ ] Contact Type
