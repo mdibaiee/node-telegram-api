@@ -36,10 +36,6 @@ var DEFAULTS = {
   }
 };
 
-process.on('uncaughtException', function (err) {
-  console.error(err.stack);
-});
-
 /**
  * Bot class used to connect to a new bot
  * Bots have an api property which gives access to all Telegram API methods,

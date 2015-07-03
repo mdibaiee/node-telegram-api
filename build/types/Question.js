@@ -98,7 +98,7 @@ var Question = (function (_Message) {
           return message;
         } else {
           _this.emit('question:invalid', message);
-          throw update;
+          throw message;
         }
       });
     }

@@ -78,20 +78,6 @@ var Forward = (function (_Base) {
       this.properties.message_id = _message;
       return this;
     }
-  }, {
-    key: 'keyboard',
-
-    /**
-     * Sets keyboard of the message
-     * The value of reply_markup is set to the sanitized keyboard properties
-     * i.e. reply_markup = JSON.stringify(kb.getProperties())
-     * @param  {object} kb A Keyboard instance
-     * @return {object} returns the message object
-     */
-    value: function keyboard(kb) {
-      this._keyboard = kb;
-      return this;
-    }
 
     // This class inherits Base's send method
 
