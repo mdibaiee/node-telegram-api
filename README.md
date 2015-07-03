@@ -41,8 +41,6 @@ bot.command('start', function(message) {
 });
 ```
 
-![@JavaScriptBot](https://github.com/mdibaiee/node-telegram-api/raw/master/demo.gif)
-
 # Bots using this module
 
 [@JavaScriptBot](https://telegram.me/JavaScriptBot) => [mdibaiee/javascriptbot](https://github.com/mdibaiee/javascriptbot)
