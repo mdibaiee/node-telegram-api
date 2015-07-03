@@ -6,8 +6,6 @@ using the new [Telegram API](https://core.telegram.org/bots/api).
 telegram-api is in beta, your feedback is appreciated, please [fill an issue](https://github.com/mdibaiee/node-telegram-api/issues)
 for any bugs you find or any suggestions you have.
 
-For an example of a bot written using this module, see [Bots using this module](#bots-using-this-module) below.
-
 ```
 npm install telegram-api
 ```
