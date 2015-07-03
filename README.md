@@ -3,14 +3,16 @@ Telegram Bots
 Create and control [Telegram bots](https://core.telegram.org/bots) easily
 using the new [Telegram API](https://core.telegram.org/bots/api).
 
-telegram-api is in beta, your feedback is appreciated, please [fill an issue](https://github.com/mdibaiee/node-telegram-api/issues)
-for any bugs you find or any suggestions you have.
-
 ```
 npm install telegram-api
 ```
 
+telegram-api is in beta, your feedback is appreciated, please [fill an issue](https://github.com/mdibaiee/node-telegram-api/issues)
+for any bugs you find or any suggestions you have.
+
 If you are cloning this repository, remember to run `npm install` to install dependencies.
+
+If you are looking for a real-life example of a bot written using this module, see [mdibaiee/javascriptbot](https://github.com/mdibaiee/javascriptbot).
 
 [Documentation](https://github.com/mdibaiee/node-telegram-api/wiki)
 ==============
