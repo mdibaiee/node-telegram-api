@@ -1,4 +1,5 @@
-# Telegram Bots
+Telegram Bots
+=============
 Create and control [Telegram bots](https://core.telegram.org/bots) easily
 using the new [Telegram API](https://core.telegram.org/bots/api).
 
@@ -13,10 +14,11 @@ npm install telegram-api
 
 If you are cloning this repository, remember to run `npm install` to install dependencies.
 
-[**Documentation**](https://github.com/mdibaiee/node-telegram-api/wiki)
+[Documentation](https://github.com/mdibaiee/node-telegram-api/wiki)
+==============
 
-#Example
-
+Example
+=======
 ```javascript
 var Bot = require('telegram-api');
 var Message = require('telegram-api/types/Message');
@@ -41,12 +43,13 @@ bot.command('start', function(message) {
 });
 ```
 
-# Bots using this module
+Bots using this module
+======================
 
 [@JavaScriptBot](https://telegram.me/JavaScriptBot) => [mdibaiee/javascriptbot](https://github.com/mdibaiee/javascriptbot)
 
-# Todo
-
+Todo
+====
 - [x] Webhook support (not tested, see [#4](https://github.com/mdibaiee/node-telegram-api/issues/4))
 - [x] Forward Type
 - [x] BulkMessage Type
