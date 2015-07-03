@@ -13,7 +13,7 @@ module.exports = function(grunt) {
     eslint: {
       scripts: ['lib/**/*.js']
     },
-    symlink: {
+    copy: {
       classes: {
         files: [{
           expand: true,
@@ -33,8 +33,8 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-babel');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-contrib-symlink');
+  grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-eslint');
 
-  grunt.registerTask('default', ['babel', 'symlink', 'eslint']);
+  grunt.registerTask('default', ['babel', 'copy', 'eslint']);
 };
