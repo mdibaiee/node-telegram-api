@@ -15,6 +15,32 @@ If you are cloning this repository, remember to run `npm install` to install dep
 
 [**Documentation**](https://github.com/mdibaiee/node-telegram-api/wiki)
 
+#Example
+
+```javascript
+var Bot = require('telegram-api');
+var Message = require('telegram-api/types/Message');
+var File = require('telegram-api/types/File');
+
+var bot = new Bot({
+  token: 'YOUR_TOKEN'
+});
+
+bot.start();
+
+bot.get(/Hi|Hey|Hello|Yo/, function(message) {
+  var answer = new Message().text('Hello, Sir').to(message.chat.id);
+
+  bot.send(answer);
+});
+
+bot.command('start', function(message) {
+  var welcome = new File().file('./some_photo.png').caption('Welcome');
+
+  bot.send(welcome);
+});
+```
+
 ![@JavaScriptBot](https://github.com/mdibaiee/node-telegram-api/raw/master/demo.gif)
 
 # Bots using this module
