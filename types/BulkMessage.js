@@ -1,0 +1,1 @@
+../build/types/BulkMessage.js
