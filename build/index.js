@@ -203,6 +203,7 @@ var Bot = (function (_EventEmitter) {
         if (!ev) {
           return;
         }
+
         ev.listener(res.message);
       });
     }
