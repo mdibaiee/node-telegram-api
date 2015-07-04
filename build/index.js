@@ -69,6 +69,8 @@ var Bot = (function (_EventEmitter) {
     // EventEmitter
     this._events = {};
     this._userEvents = [];
+
+    this.setMaxListeners(100);
   }
 
   _inherits(Bot, _EventEmitter);
