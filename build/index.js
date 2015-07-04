@@ -149,7 +149,7 @@ var Bot = (function (_EventEmitter) {
      */
     value: function command(cmd, listener) {
       this._userEvents.push({
-        pattern: new RegExp('/' + cmd),
+        pattern: new RegExp('^/' + cmd),
         listener: listener
       });
 
@@ -190,9 +190,11 @@ var Bot = (function (_EventEmitter) {
         var text = res.message.text;
         if (text.startsWith('/')) {
           // Commands are sent in /command@thisusername format in groups
-          var regex = new RegExp('@' + _this2.info.username + '$');
-          text = text.replace(regex, '');
+          var regex = new RegExp('(/.*)@' + _this2.info.username);
+          text = text.replace(regex, '$1');
           res.message.text = text;
+
+          console.log(res.message.text);
         }
 
         var ev = _this2._userEvents.find(function (_ref) {
@@ -201,6 +203,7 @@ var Bot = (function (_EventEmitter) {
         });
 
         if (!ev) {
+          _this2.emit('command-notfound', res.message);
           return;
         }
 

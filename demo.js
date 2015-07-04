@@ -44,5 +44,5 @@ bot.command('start', message => {
 const test = new Message().text('Test Command');
 
 bot.command('test', message => {
-  bot.send(test.to(message.chat.id));
+  bot.send(test.to(message.chat.id).text(message.text));
 });
