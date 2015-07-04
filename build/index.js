@@ -192,6 +192,7 @@ var Bot = (function (_EventEmitter) {
           // Commands are sent in /command@thisusername format in groups
           var regex = new RegExp('@' + _this2.info.username + '$');
           text = text.replace(regex, '');
+          res.message.text = text;
         }
 
         var ev = _this2._userEvents.find(function (_ref) {

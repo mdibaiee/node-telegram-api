@@ -5,7 +5,7 @@ var Message = require('telegram-api/types/Message');
 var Question = require('telegram-api/types/Question');
 
 var bot = new Bot({
-  token: 'YOUR_KEY'
+  token: '114687409:AAEVpfOmGI7xNKiKzVA9LBcOO9INpIwnvDI'
 });
 
 bot.start().catch(err => {
