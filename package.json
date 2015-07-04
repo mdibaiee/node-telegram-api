@@ -1,6 +1,6 @@
 {
   "name": "telegram-api",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Control Telegram bots easily using the new Telegram API",
   "main": "index.js",
   "scripts": {
@@ -21,6 +21,7 @@
   "bugs": {
     "url": "https://github.com/mdibaiee/node-telegram-api/issues"
   },
+  "files": ["types"],
   "directories": {
     "lib": "lib"
   },
