@@ -188,13 +188,13 @@ var Bot = (function (_EventEmitter) {
 
       update.forEach(function (res) {
         var text = res.message.text;
-        if (text.startsWith('/')) {
+        var selfUsername = '@' + _this2.info.username;
+
+        if (text.startsWith('/') && text.indexOf(selfUsername) > -1) {
           // Commands are sent in /command@thisusername format in groups
           var regex = new RegExp('(/.*)@' + _this2.info.username);
           text = text.replace(regex, '$1');
           res.message.text = text;
-
-          console.log(res.message.text);
         }
 
         var ev = _this2._userEvents.find(function (_ref) {
