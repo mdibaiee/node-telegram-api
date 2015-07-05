@@ -14,24 +14,28 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-var _api = require('./api');
+var _functionsApi = require('./functions/api');
 
-var _api2 = _interopRequireDefault(_api);
+var _functionsApi2 = _interopRequireDefault(_functionsApi);
 
-var _webhook = require('./webhook');
+var _functionsWebhook = require('./functions/webhook');
 
-var _webhook2 = _interopRequireDefault(_webhook);
+var _functionsWebhook2 = _interopRequireDefault(_functionsWebhook);
 
-var _poll = require('./poll');
+var _functionsPoll = require('./functions/poll');
 
-var _poll2 = _interopRequireDefault(_poll);
+var _functionsPoll2 = _interopRequireDefault(_functionsPoll);
+
+var _functionsArgumentParser = require('./functions/argument-parser');
+
+var _functionsArgumentParser2 = _interopRequireDefault(_functionsArgumentParser);
 
 var _events = require('events');
 
 var DEFAULTS = {
   update: {
     offset: 0,
-    timeout: 0.5,
+    timeout: 20,
     limit: 100
   }
 };
@@ -62,7 +66,7 @@ var Bot = (function (_EventEmitter) {
     this.token = options.token;
     this.update = Object.assign(options.update || {}, DEFAULTS.update);
 
-    this.api = new _api2['default'](this.token);
+    this.api = new _functionsApi2['default'](this.token);
 
     this.msg = {};
 
@@ -99,7 +103,7 @@ var Bot = (function (_EventEmitter) {
       var _this = this;
 
       if (hook) {
-        return (0, _webhook2['default'])(hook, this);
+        return (0, _functionsWebhook2['default'])(hook, this);
       }
       return this.api.getMe().then(function (response) {
         _this.info = response.result;
@@ -107,9 +111,9 @@ var Bot = (function (_EventEmitter) {
         _this.on('update', _this._update);
 
         if (hook) {
-          return (0, _webhook2['default'])(hook, _this);
+          return (0, _functionsWebhook2['default'])(hook, _this);
         } else {
-          return (0, _poll2['default'])(_this);
+          return (0, _functionsPoll2['default'])(_this);
         }
       });
     }
@@ -142,14 +146,19 @@ var Bot = (function (_EventEmitter) {
 
     /**
      * Listens on a command
-     * @param  {string} cmd the command string, should not include slash (/)
+     * @param  {string} command the command string, should not include slash (/)
      * @param  {function} listener function to call when the command is received,
      *                           gets the update
      * @return {object} returns the bot object
      */
-    value: function command(cmd, listener) {
+    value: function command(_command, listener) {
+      var regex = /[^\s]+/;
+
+      var cmd = _command.match(regex)[0];
+
       this._userEvents.push({
         pattern: new RegExp('^/' + cmd),
+        parse: _functionsArgumentParser2['default'].bind(null, _command),
         listener: listener
       });
 
@@ -205,6 +214,10 @@ var Bot = (function (_EventEmitter) {
         if (!ev) {
           _this2.emit('command-notfound', res.message);
           return;
+        }
+
+        if (ev.parse) {
+          res.message.args = ev.parse(res.message.text);
         }
 
         ev.listener(res.message);

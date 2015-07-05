@@ -43,6 +43,6 @@ bot.command('start', message => {
 
 const test = new Message().text('Test Command');
 
-bot.command('test', message => {
-  bot.send(test.to(message.chat.id).text(message.text));
+bot.command('test <subject> [count|number] ...rest', message => {
+  bot.send(test.to(message.chat.id).text(message.args.subject));
 });
