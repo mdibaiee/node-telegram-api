@@ -24,18 +24,6 @@ var _mime = require('mime');
 
 var _mime2 = _interopRequireDefault(_mime);
 
-var _fs = require('fs');
-
-var _fs2 = _interopRequireDefault(_fs);
-
-var _path = require('path');
-
-var _path2 = _interopRequireDefault(_path);
-
-var _restler = require('restler');
-
-var _restler2 = _interopRequireDefault(_restler);
-
 var TYPES = ['photo', 'video', 'document', 'audio'];
 
 /**
@@ -85,13 +73,10 @@ var File = (function (_Base) {
      */
     value: function file(_file, fileType) {
       if (fileType) {
-        this.properties[fileType] = _file;
+        this.properties[fileType] = { file: _file };
 
         return this;
       }
-
-      var stat = _fs2['default'].statSync(_file);
-      var name = _path2['default'].basename(_file);
 
       var _mime$lookup$split = _mime2['default'].lookup(_file).split('/');
 
@@ -112,7 +97,7 @@ var File = (function (_Base) {
         type = 'document';
       }
 
-      this.properties[type] = _restler2['default'].file(_file, name, stat.size, 'utf-8');
+      this.properties[type] = { file: _file };
 
       this.method = 'send' + (type[0].toUpperCase() + type.slice(1));
 

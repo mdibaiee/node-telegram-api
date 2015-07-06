@@ -154,7 +154,7 @@ var Bot = (function (_EventEmitter) {
     value: function command(_command, listener) {
       var regex = /[^\s]+/;
 
-      var cmd = _command.match(regex)[0];
+      var cmd = _command.match(regex)[0].trim();
 
       this._userEvents.push({
         pattern: new RegExp('^/' + cmd),

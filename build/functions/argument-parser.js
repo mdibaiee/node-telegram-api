@@ -43,8 +43,13 @@ var ESCAPABLE = '.^$*+?()[{\\|}]'.split('');
  */
 
 function argumentParser(format, string) {
-  string = string.replace(/[^\s]+/, '');
-  format = format.replace(/[^\s]+/, '');
+  string = string.replace(/[^\s]+/, '').trim();
+  format = format.replace(/[^\s]+/, '').trim();
+
+  if (!string || !format) {
+    return {};
+  }
+
   var indexes = [];
 
   format = format.replace(/\s/g, '\\s*');

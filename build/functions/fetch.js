@@ -8,25 +8,49 @@ exports.getBody = getBody;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _restler = require('restler');
+var _unirest = require('unirest');
 
-var _restler2 = _interopRequireDefault(_restler);
+var _unirest2 = _interopRequireDefault(_unirest);
 
 function fetch(path) {
   var data = arguments[1] === undefined ? {} : arguments[1];
 
   return new Promise(function (resolve, reject) {
-    var method = Object.keys(data).length ? 'POST' : 'GET';
-    var multipart = method === 'POST' ? true : false;
+    var files = {};
 
-    _restler2['default'].request('https://api.telegram.org/bot' + path, {
-      data: data, method: method, multipart: multipart
-    }).on('complete', function (response) {
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+      for (var _iterator = Object.keys(data)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        var key = _step.value;
+
+        if (data[key].file) {
+          files[key] = data[key].file;
+          delete data[key];
+        }
+      }
+    } catch (err) {
+      _didIteratorError = true;
+      _iteratorError = err;
+    } finally {
       try {
-        var json = JSON.parse(response);
-        resolve(json);
-      } catch (e) {
-        reject(e);
+        if (!_iteratorNormalCompletion && _iterator['return']) {
+          _iterator['return']();
+        }
+      } finally {
+        if (_didIteratorError) {
+          throw _iteratorError;
+        }
+      }
+    }
+
+    _unirest2['default'].post('https://api.telegram.org/bot' + path).field(data).attach(files).end(function (response) {
+      if (response.statusType === 4 || response.statusType === 5) {
+        reject(response);
+      } else {
+        resolve(response.body);
       }
     });
   });
