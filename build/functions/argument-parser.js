@@ -74,7 +74,6 @@ function argumentParser(format, string) {
     return a.offset < b.offset ? -1 : 1;
   });
 
-  console.log(format);
   var regex = new RegExp(format);
 
   var matched = regex.exec(string).slice(1);
