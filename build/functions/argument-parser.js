@@ -122,7 +122,7 @@ function escape(symbols) {
 
 var TYPES = {
   'number': '\\d',
-  'word': '\\w'
+  'word': '\\S'
 };
 
 function getFormat() {
