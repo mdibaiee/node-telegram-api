@@ -196,7 +196,10 @@ var Bot = (function (_EventEmitter) {
       }
 
       update.forEach(function (res) {
+        console.log(res);
         var text = res.message.text;
+        if (!text) return;
+
         var selfUsername = '@' + _this2.info.username;
 
         if (text.startsWith('/') && text.indexOf(selfUsername) > -1) {
