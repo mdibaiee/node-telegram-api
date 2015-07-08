@@ -13,6 +13,9 @@ var FORMAT_REST = /\.{3}(\w+)/g;
 
 var ESCAPABLE = '.^$*+?()[{\\|}]'.split('');
 
+var REQUIRED = 0;
+var OPTIONAL = 1;
+
 /**
  * Parses a message for arguments, based on format
  *
@@ -46,23 +49,28 @@ function argumentParser(format, string) {
   string = string.replace(/[^\s]+/, '').trim();
   format = format.replace(/[^\s]+/, '').trim();
 
-  if (!string || !format) {
+  if (!format) {
     return {};
   }
 
-  var indexes = [];
+  if (!string) return { args: {}, params: params };
+
+  var indexes = [],
+      params = {};
 
   format = format.replace(/\s/g, '\\s*');
   format = format.replace(FORMAT_REQUIRED, function (f, symbols, arg, type, offset) {
     if (type === undefined) type = 'word';
 
     indexes.push({ arg: arg, offset: offset });
+    params[arg] = REQUIRED;
     return (escape(symbols) + getFormat(type, 'required')).trim();
   });
   format = format.replace(FORMAT_OPTIONAL, function (f, symbols, arg, type, offset) {
     if (type === undefined) type = 'word';
 
     indexes.push({ arg: arg, offset: offset });
+    params[arg] = OPTIONAL;
     return (escape(symbols, '?') + getFormat(type, 'optional')).trim();
   });
   format = format.replace(FORMAT_REST, function (full, arg, offset) {
@@ -109,7 +117,7 @@ function argumentParser(format, string) {
     }
   }
 
-  return object;
+  return { args: object, params: params };
 }
 
 function escape(symbols) {

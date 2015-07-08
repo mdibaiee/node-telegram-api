@@ -196,7 +196,6 @@ var Bot = (function (_EventEmitter) {
       }
 
       update.forEach(function (res) {
-        console.log(res);
         var text = res.message.text;
         if (!text) return;
 
