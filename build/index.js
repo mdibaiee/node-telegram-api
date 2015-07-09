@@ -32,6 +32,10 @@ var _functionsArgumentParser2 = _interopRequireDefault(_functionsArgumentParser)
 
 var _events = require('events');
 
+var _typesMessage = require('./types/Message');
+
+var _typesMessage2 = _interopRequireDefault(_typesMessage);
+
 var DEFAULTS = {
   update: {
     offset: 0,
@@ -219,10 +223,80 @@ var Bot = (function (_EventEmitter) {
         }
 
         if (ev.parse) {
-          res.message.args = ev.parse(res.message.text);
-        }
+          var bot;
+          var iter;
 
-        ev.listener(res.message);
+          var _ret = (function () {
+            var ask = function ask(param) {
+              if (!args[param]) {
+                bot.send(new _typesMessage2['default']().text('Enter value for ' + param).to(res.message.chat.id)).then(function (answer) {
+                  args[param] = answer.text;
+                  iter.next();
+                });
+              }
+            };
+
+            var gen = regeneratorRuntime.mark(function gen(par) {
+              var index;
+              return regeneratorRuntime.wrap(function gen$(context$5$0) {
+                while (1) switch (context$5$0.prev = context$5$0.next) {
+                  case 0:
+                    index = 0;
+
+                  case 1:
+                    if (!(index < par.length)) {
+                      context$5$0.next = 12;
+                      break;
+                    }
+
+                    while (args[par[index]] && index < par.length) index++;
+                    context$5$0.next = 5;
+                    return ask(par[index]);
+
+                  case 5:
+                    index++;
+
+                    if (!(index == par.length)) {
+                      context$5$0.next = 10;
+                      break;
+                    }
+
+                    res.message.args = args;
+                    ev.listener(res.message);
+                    return context$5$0.abrupt('return');
+
+                  case 10:
+                    context$5$0.next = 1;
+                    break;
+
+                  case 12:
+                  case 'end':
+                    return context$5$0.stop();
+                }
+              }, gen, this);
+            });
+
+            var _ev$parse = ev.parse(res.message.text);
+
+            var params = _ev$parse.params;
+            var args = _ev$parse.args;
+
+            if (!Object.keys(params).length) {
+              ev.listener(res.message);
+              return {
+                v: undefined
+              };
+            }
+            bot = _this2;
+            iter = gen(Object.keys(params));
+
+            iter.next();
+          })();
+
+          if (typeof _ret === 'object') return _ret.v;
+        } else {
+          ev.listener(res.message);
+        }
       });
     }
   }]);

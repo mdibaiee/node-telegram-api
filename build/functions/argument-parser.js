@@ -49,11 +49,7 @@ function argumentParser(format, string) {
   string = string.replace(/[^\s]+/, '').trim();
   format = format.replace(/[^\s]+/, '').trim();
 
-  if (!format) {
-    return {};
-  }
-
-  if (!string) return { args: {}, params: params };
+  if (!format) return { args: {}, params: {} };
 
   var indexes = [],
       params = {};
@@ -77,6 +73,8 @@ function argumentParser(format, string) {
     indexes.push({ offset: offset, arg: arg });
     return getFormat(null, 'rest');
   });
+
+  if (!string) return { args: {}, params: params };
 
   indexes = indexes.sort(function (a, b) {
     return a.offset < b.offset ? -1 : 1;
