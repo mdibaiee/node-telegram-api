@@ -41,6 +41,11 @@ bot.command('start', function(message) {
 
   bot.send(welcome);
 });
+
+// Arguments, see: https://github.com/mdibaiee/node-telegram-api/wiki/Commands
+bot.command('weather <city> [date]', function(message) {
+  console.log(message.args.city, message.args.date);
+})
 ```
 
 Bots using this module
