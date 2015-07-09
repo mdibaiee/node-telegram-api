@@ -202,6 +202,8 @@ var Bot = (function (_EventEmitter) {
         this.update.offset += 1;
       }
 
+      console.log(update);
+
       update.forEach(function (res) {
         var marked3$0 = [getAnswer].map(regeneratorRuntime.mark);
 
@@ -237,9 +239,13 @@ var Bot = (function (_EventEmitter) {
         var params = _ev$parse.params;
         var args = _ev$parse.args;
 
+        res.message.args = args;
+
         var requiredParams = Object.keys(params).filter(function (param) {
           return params[param] === REQUIRED && !args[param];
         });
+
+        console.log(requiredParams);
 
         if (!requiredParams.length) {
           ev.listener(res.message);
@@ -337,7 +343,6 @@ var Bot = (function (_EventEmitter) {
         (function loop() {
           var next = iterator.next();
           if (next.done) {
-            res.message.args = args;
             ev.listener(res.message);
             return;
           }
