@@ -15,6 +15,7 @@ var ESCAPABLE = '.^$*+?()[{\\|}]'.split('');
 
 var REQUIRED = 0;
 var OPTIONAL = 1;
+var REST = 2;
 
 /**
  * Parses a message for arguments, based on format
@@ -71,6 +72,7 @@ function argumentParser(format, string) {
   });
   format = format.replace(FORMAT_REST, function (full, arg, offset) {
     indexes.push({ offset: offset, arg: arg });
+    params[arg] = REST;
     return getFormat(null, 'rest');
   });
 

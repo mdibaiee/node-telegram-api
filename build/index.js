@@ -44,6 +44,9 @@ var DEFAULTS = {
   }
 };
 
+var REQUIRED = 0;
+var OPTIONAL = 1;
+
 /**
  * Bot class used to connect to a new bot
  * Bots have an api property which gives access to all Telegram API methods,
@@ -200,6 +203,8 @@ var Bot = (function (_EventEmitter) {
       }
 
       update.forEach(function (res) {
+        var marked3$0 = [getAnswer].map(regeneratorRuntime.mark);
+
         var text = res.message.text;
         if (!text) return;
 
@@ -222,81 +227,122 @@ var Bot = (function (_EventEmitter) {
           return;
         }
 
-        if (ev.parse) {
-          var bot;
-          var iter;
-
-          var _ret = (function () {
-            var ask = function ask(param) {
-              if (!args[param]) {
-                bot.send(new _typesMessage2['default']().text('Enter value for ' + param).to(res.message.chat.id)).then(function (answer) {
-                  args[param] = answer.text;
-                  iter.next();
-                });
-              }
-            };
-
-            var gen = regeneratorRuntime.mark(function gen(par) {
-              var index;
-              return regeneratorRuntime.wrap(function gen$(context$5$0) {
-                while (1) switch (context$5$0.prev = context$5$0.next) {
-                  case 0:
-                    index = 0;
-
-                  case 1:
-                    if (!(index < par.length)) {
-                      context$5$0.next = 12;
-                      break;
-                    }
-
-                    while (args[par[index]] && index < par.length) index++;
-                    context$5$0.next = 5;
-                    return ask(par[index]);
-
-                  case 5:
-                    index++;
-
-                    if (!(index == par.length)) {
-                      context$5$0.next = 10;
-                      break;
-                    }
-
-                    res.message.args = args;
-                    ev.listener(res.message);
-                    return context$5$0.abrupt('return');
-
-                  case 10:
-                    context$5$0.next = 1;
-                    break;
-
-                  case 12:
-                  case 'end':
-                    return context$5$0.stop();
-                }
-              }, gen, this);
-            });
-
-            var _ev$parse = ev.parse(res.message.text);
-
-            var params = _ev$parse.params;
-            var args = _ev$parse.args;
-
-            if (!Object.keys(params).length) {
-              ev.listener(res.message);
-              return {
-                v: undefined
-              };
-            }
-            bot = _this2;
-            iter = gen(Object.keys(params));
-
-            iter.next();
-          })();
-
-          if (typeof _ret === 'object') return _ret.v;
-        } else {
+        if (!ev.parse) {
           ev.listener(res.message);
+          return;
         }
+
+        var _ev$parse = ev.parse(res.message.text);
+
+        var params = _ev$parse.params;
+        var args = _ev$parse.args;
+
+        var requiredParams = Object.keys(params).filter(function (param) {
+          return params[param] === REQUIRED;
+        });
+
+        if (!requiredParams.length) {
+          ev.listener(res.message);
+          return;
+        }
+
+        var bot = _this2;
+        function getAnswer() {
+          var _iteratorNormalCompletion, _didIteratorError, _iteratorError, _loop, _iterator, _step;
+
+          return regeneratorRuntime.wrap(function getAnswer$(context$4$0) {
+            var _this3 = this;
+
+            while (1) switch (context$4$0.prev = context$4$0.next) {
+              case 0:
+                _iteratorNormalCompletion = true;
+                _didIteratorError = false;
+                _iteratorError = undefined;
+                context$4$0.prev = 3;
+                _loop = regeneratorRuntime.mark(function callee$4$0() {
+                  var param, msg;
+                  return regeneratorRuntime.wrap(function callee$4$0$(context$5$0) {
+                    while (1) switch (context$5$0.prev = context$5$0.next) {
+                      case 0:
+                        param = _step.value;
+                        msg = new _typesMessage2['default']().to(res.message.chat.id).text('Enter value for ' + param);
+                        context$5$0.next = 4;
+                        return bot.send(msg).then(function (answer) {
+                          args[param] = answer.text;
+                        });
+
+                      case 4:
+                      case 'end':
+                        return context$5$0.stop();
+                    }
+                  }, callee$4$0, _this3);
+                });
+                _iterator = requiredParams[Symbol.iterator]();
+
+              case 6:
+                if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
+                  context$4$0.next = 11;
+                  break;
+                }
+
+                return context$4$0.delegateYield(_loop(), 't0', 8);
+
+              case 8:
+                _iteratorNormalCompletion = true;
+                context$4$0.next = 6;
+                break;
+
+              case 11:
+                context$4$0.next = 17;
+                break;
+
+              case 13:
+                context$4$0.prev = 13;
+                context$4$0.t1 = context$4$0['catch'](3);
+                _didIteratorError = true;
+                _iteratorError = context$4$0.t1;
+
+              case 17:
+                context$4$0.prev = 17;
+                context$4$0.prev = 18;
+
+                if (!_iteratorNormalCompletion && _iterator['return']) {
+                  _iterator['return']();
+                }
+
+              case 20:
+                context$4$0.prev = 20;
+
+                if (!_didIteratorError) {
+                  context$4$0.next = 23;
+                  break;
+                }
+
+                throw _iteratorError;
+
+              case 23:
+                return context$4$0.finish(20);
+
+              case 24:
+                return context$4$0.finish(17);
+
+              case 25:
+              case 'end':
+                return context$4$0.stop();
+            }
+          }, marked3$0[0], this, [[3, 13, 17, 25], [18,, 20, 24]]);
+        }
+
+        var iterator = getAnswer();
+        (function loop() {
+          var next = iterator.next();
+          if (next.done) {
+            ev.listener(res.message);
+            return;
+          }
+
+          next.value.then(loop);
+        })();
       });
     }
   }]);
