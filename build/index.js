@@ -238,7 +238,7 @@ var Bot = (function (_EventEmitter) {
         var args = _ev$parse.args;
 
         var requiredParams = Object.keys(params).filter(function (param) {
-          return params[param] === REQUIRED;
+          return params[param] === REQUIRED && !args[param];
         });
 
         if (!requiredParams.length) {
@@ -337,6 +337,7 @@ var Bot = (function (_EventEmitter) {
         (function loop() {
           var next = iterator.next();
           if (next.done) {
+            res.message.args = args;
             ev.listener(res.message);
             return;
           }
