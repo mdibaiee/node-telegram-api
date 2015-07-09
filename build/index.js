@@ -245,8 +245,6 @@ var Bot = (function (_EventEmitter) {
           return params[param] === REQUIRED && !args[param];
         });
 
-        console.log(requiredParams);
-
         if (!requiredParams.length) {
           ev.listener(res.message);
           return;

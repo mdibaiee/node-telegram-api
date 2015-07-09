@@ -12,7 +12,7 @@ for any bugs you find or any suggestions you have.
 
 If you are cloning this repository, remember to run `npm install` to install dependencies.
 
-If you are looking for a real-life example of a bot written using this module, see [mdibaiee/javascriptbot](https://github.com/mdibaiee/javascriptbot).
+If you are looking for a real-life example of a bot written using this module, see [mdibaiee/webdevrobot](https://github.com/mdibaiee/webdevrobot).
 
 [Documentation](https://github.com/mdibaiee/node-telegram-api/wiki)
 ==============
@@ -46,7 +46,7 @@ bot.command('start', function(message) {
 Bots using this module
 ======================
 
-[@JavaScriptBot](https://telegram.me/JavaScriptBot) => [mdibaiee/javascriptbot](https://github.com/mdibaiee/javascriptbot)
+[@webdevrobot](https://telegram.me/webdevrobot) => [mdibaiee/webdevrobot](https://github.com/mdibaiee/webdevrobot)
 
 Todo
 ====
