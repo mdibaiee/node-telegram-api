@@ -14,6 +14,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== 'function' 
 
 var _events = require('events');
 
+var ANSWER_THRESHOLD = 10;
+
 /**
  * Base class of all classes
  */
@@ -67,7 +69,10 @@ var Base = (function (_EventEmitter) {
         }
 
         var chat = _this.properties.chat_id;
+        var answers = 0;
         bot.on('update', function listener(result) {
+          answers += result.length;
+
           var update = result.find(function (_ref) {
             var message = _ref.message;
 
@@ -84,6 +89,10 @@ var Base = (function (_EventEmitter) {
 
             this.emit('message:answer', update.message);
 
+            bot.removeListener('update', listener);
+          }
+
+          if (answers >= ANSWER_THRESHOLD) {
             bot.removeListener('update', listener);
           }
         });

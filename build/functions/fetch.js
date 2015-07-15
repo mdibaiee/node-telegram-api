@@ -47,7 +47,7 @@ function fetch(path) {
     }
 
     _unirest2['default'].post('https://api.telegram.org/bot' + path).field(data).attach(files).end(function (response) {
-      if (response.statusType === 4 || response.statusType === 5) {
+      if (response.statusType === 4 || response.statusType === 5 || !response.body.ok) {
         reject(response);
       } else {
         resolve(response.body);
