@@ -37,7 +37,7 @@ bot.get(/Hi|Hey|Hello|Yo/, function(message) {
 });
 
 bot.command('start', function(message) {
-  var welcome = new File().file('./some_photo.png').caption('Welcome');
+  var welcome = new File().file('./some_photo.png').caption('Welcome').to(message.chat.id);
 
   bot.send(welcome);
 });
