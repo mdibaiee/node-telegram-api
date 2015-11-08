@@ -46,3 +46,6 @@ const test = new Message().text('Test Command');
 bot.command('test <subject> [count|number] ...rest', message => {
   bot.send(test.to(message.chat.id).text(message.args.subject));
 });
+
+// to stop a bot
+// bot.stop();

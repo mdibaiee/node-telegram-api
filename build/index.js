@@ -183,6 +183,22 @@ var Bot = (function (_EventEmitter) {
       return message.send(this)['catch'](console.error);
     }
   }, {
+    key: 'stop',
+
+    /**
+     * Stops the bot, deattaching all listeners and polling
+     */
+    value: function stop() {
+      this._stop = true;
+
+      if (this._webhookServer) {
+        this._webhookServer.close();
+      }
+
+      this.removeListener('update', this._update);
+      this._events = {};
+    }
+  }, {
     key: '_update',
 
     /**
@@ -201,8 +217,6 @@ var Bot = (function (_EventEmitter) {
       if (this.update) {
         this.update.offset += 1;
       }
-
-      console.log(update);
 
       update.forEach(function (res) {
         var marked3$0 = [getAnswer].map(regeneratorRuntime.mark);

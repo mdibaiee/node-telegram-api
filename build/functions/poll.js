@@ -12,6 +12,7 @@ function poll(bot) {
     }
     bot.emit('update', response.result);
 
+    if (bot._stop) return null;
     return poll(bot);
   });
 }

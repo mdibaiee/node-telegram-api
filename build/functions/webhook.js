@@ -29,7 +29,7 @@ function webhook(options, bot) {
 
   return bot.api.setWebhook(options.url).then(function () {
 
-    _http2['default'].createServer(options.server, function (req, res) {
+    bot._webhookServer = _http2['default'].createServer(options.server, function (req, res) {
       return (0, _fetch.getBody)(req).then(function (data) {
         bot.emit('update', _qs2['default'].parse(data).result);
 
