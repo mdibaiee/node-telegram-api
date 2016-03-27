@@ -21,8 +21,6 @@ const DEFAULTS = {
 
 const REQUIRED = 0;
 
-console.log(poll);
-
 /**
  * Bot class used to connect to a new bot
  * Bots have an api property which gives access to all Telegram API methods,
