@@ -1,9 +1,15 @@
+import 'babel-polyfill';
 import API from './functions/api';
 import webhook from './functions/webhook';
 import poll from './functions/poll';
 import argumentParser from './functions/argument-parser';
 import {EventEmitter} from 'events';
 import Message from './types/Message';
+import File from './types/File';
+import Keyboard from './types/Keyboard';
+import BulkMessage from './types/BulkMessage';
+import Question from './types/Question';
+import Forward from './types/Forward';
 
 const DEFAULTS = {
   update: {
@@ -14,7 +20,8 @@ const DEFAULTS = {
 };
 
 const REQUIRED = 0;
-const OPTIONAL = 1;
+
+console.log(poll);
 
 /**
  * Bot class used to connect to a new bot
@@ -164,7 +171,9 @@ export default class Bot extends EventEmitter {
 
     update.forEach(res => {
       let text = res.message.text;
-      if (!text) return;
+      if (!text) {
+        return;
+      }
 
       const selfUsername = `@${this.info.username}`;
 
@@ -223,3 +232,12 @@ export default class Bot extends EventEmitter {
     });
   }
 }
+
+export {
+  File,
+  Message,
+  BulkMessage,
+  Forward,
+  Question,
+  Keyboard
+};

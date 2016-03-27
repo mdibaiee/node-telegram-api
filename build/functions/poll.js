@@ -1,10 +1,9 @@
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports['default'] = poll;
-
+exports.default = poll;
 function poll(bot) {
   return bot.api.getUpdates(bot.update).then(function (response) {
     if (!response.result.length) {
@@ -16,5 +15,4 @@ function poll(bot) {
     return poll(bot);
   });
 }
-
 module.exports = exports['default'];

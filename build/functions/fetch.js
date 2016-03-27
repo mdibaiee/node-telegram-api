@@ -1,19 +1,19 @@
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports['default'] = fetch;
+exports.default = fetch;
 exports.getBody = getBody;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 var _unirest = require('unirest');
 
 var _unirest2 = _interopRequireDefault(_unirest);
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function fetch(path) {
-  var data = arguments[1] === undefined ? {} : arguments[1];
+  var data = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
   return new Promise(function (resolve, reject) {
     var files = {};
@@ -36,8 +36,8 @@ function fetch(path) {
       _iteratorError = err;
     } finally {
       try {
-        if (!_iteratorNormalCompletion && _iterator['return']) {
-          _iterator['return']();
+        if (!_iteratorNormalCompletion && _iterator.return) {
+          _iterator.return();
         }
       } finally {
         if (_didIteratorError) {
@@ -46,7 +46,7 @@ function fetch(path) {
       }
     }
 
-    _unirest2['default'].post('https://api.telegram.org/bot' + path).field(data).attach(files).end(function (response) {
+    _unirest2.default.post('https://api.telegram.org/bot' + path).field(data).attach(files).end(function (response) {
       if (response.statusType === 4 || response.statusType === 5 || !response.body || !response.body.ok) {
         reject(response);
       } else {

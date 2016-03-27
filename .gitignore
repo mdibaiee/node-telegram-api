@@ -28,3 +28,5 @@ node_modules
 
 # Test file I use to test my module
 test.js
+
+.DS_Store

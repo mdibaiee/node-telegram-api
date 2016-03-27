@@ -4,28 +4,18 @@ module.exports = function(grunt) {
       scripts: {
         files: [{
           expand: true,
-          cwd: 'lib',
+          cwd: 'src',
           src: '**/*.js',
           dest: 'build/'
         }]
       }
     },
     eslint: {
-      scripts: ['lib/**/*.js']
-    },
-    copy: {
-      classes: {
-        files: [{
-          expand: true,
-          cwd: 'build/types',
-          src: '*',
-          dest: 'types'
-        }]
-      }
+      scripts: ['src/**/*.js']
     },
     watch: {
       scripts: {
-        files: ['lib/**/*.js'],
+        files: ['src/**/*.js'],
         tasks: ['babel']
       }
     }
@@ -33,8 +23,7 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-babel');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-eslint');
 
-  grunt.registerTask('default', ['babel', 'copy', 'eslint']);
+  grunt.registerTask('default', ['babel', 'eslint']);
 };

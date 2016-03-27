@@ -1,12 +1,12 @@
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
-exports['default'] = argumentParser;
+exports.default = argumentParser;
 var FORMAT_REQUIRED = /<(\W*)(\w+)\|?(\w+)?>/g;
 var FORMAT_OPTIONAL = /\[(\W*)(\w+)\|?(\w+)?\]/g;
 var FORMAT_REST = /\.{3}(\w+)/g;
@@ -45,7 +45,6 @@ var REST = 2;
  * @param  {string} string The message to parse
  * @return {object} Parsed arguments
  */
-
 function argumentParser(format, string) {
   string = string.replace(/[^\s]+/, '').trim();
   format = format.replace(/[^\s]+/, '').trim();
@@ -56,15 +55,17 @@ function argumentParser(format, string) {
       params = {};
 
   format = format.replace(/\s/g, '\\s*');
-  format = format.replace(FORMAT_REQUIRED, function (f, symbols, arg, type, offset) {
-    if (type === undefined) type = 'word';
+  format = format.replace(FORMAT_REQUIRED, function (f, symbols, arg) {
+    var type = arguments.length <= 3 || arguments[3] === undefined ? 'word' : arguments[3];
+    var offset = arguments[4];
 
     indexes.push({ arg: arg, offset: offset });
     params[arg] = REQUIRED;
     return (escape(symbols) + getFormat(type, 'required')).trim();
   });
-  format = format.replace(FORMAT_OPTIONAL, function (f, symbols, arg, type, offset) {
-    if (type === undefined) type = 'word';
+  format = format.replace(FORMAT_OPTIONAL, function (f, symbols, arg) {
+    var type = arguments.length <= 3 || arguments[3] === undefined ? 'word' : arguments[3];
+    var offset = arguments[4];
 
     indexes.push({ arg: arg, offset: offset });
     params[arg] = OPTIONAL;
@@ -107,8 +108,8 @@ function argumentParser(format, string) {
     _iteratorError = err;
   } finally {
     try {
-      if (!_iteratorNormalCompletion && _iterator['return']) {
-        _iterator['return']();
+      if (!_iteratorNormalCompletion && _iterator.return) {
+        _iterator.return();
       }
     } finally {
       if (_didIteratorError) {
@@ -121,7 +122,7 @@ function argumentParser(format, string) {
 }
 
 function escape(symbols) {
-  var append = arguments[1] === undefined ? '' : arguments[1];
+  var append = arguments.length <= 1 || arguments[1] === undefined ? '' : arguments[1];
 
   return symbols.split('').map(function (symbol) {
     return (ESCAPABLE.indexOf(symbol) ? '\\' + symbol : symbol) + append;
@@ -134,8 +135,8 @@ var TYPES = {
 };
 
 function getFormat() {
-  var type = arguments[0] === undefined ? 'word' : arguments[0];
-  var param = arguments[1] === undefined ? 'required' : arguments[1];
+  var type = arguments.length <= 0 || arguments[0] === undefined ? 'word' : arguments[0];
+  var param = arguments.length <= 1 || arguments[1] === undefined ? 'required' : arguments[1];
 
   var t = TYPES[type];
 

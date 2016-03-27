@@ -1,18 +1,18 @@
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _events = require('events');
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var ANSWER_THRESHOLD = 10;
 
@@ -20,55 +20,57 @@ var ANSWER_THRESHOLD = 10;
  * Base class of all classes
  */
 
-var Base = (function (_EventEmitter) {
+var Base = function (_EventEmitter) {
+  _inherits(Base, _EventEmitter);
+
   function Base(method) {
     _classCallCheck(this, Base);
 
-    _get(Object.getPrototypeOf(Base.prototype), 'constructor', this).call(this);
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Base).call(this));
 
-    this.method = method;
-    this.properties = {};
+    _this.method = method;
+    _this.properties = {};
+    return _this;
   }
 
-  _inherits(Base, _EventEmitter);
+  /**
+   * Sends the message, you should only use this method yourself if
+   * you are extending this class. Normally you should call bot.send(message)
+   *
+   * Events: message:sent => Emitted after sending the message to API, gets the
+   * 												  API's response
+   *
+   *			message:answer => Emitted when your message gets an answer from
+   *				                 the contact (reply in case of groups)
+   *				                 gets the Update object containing message
+   *
+   * @param  {object} bot
+   * @return {promise} returns a promise, resolved with message:answer
+   */
+
 
   _createClass(Base, [{
     key: 'send',
-
-    /**
-     * Sends the message, you should only use this method yourself if
-     * you are extending this class. Normally you should call bot.send(message)
-     *
-     * Events: message:sent => Emitted after sending the message to API, gets the
-     * 												  API's response
-     *
-     *			message:answer => Emitted when your message gets an answer from
-     *				                 the contact (reply in case of groups)
-     *				                 gets the Update object containing message
-     *
-     * @param  {object} bot
-     * @return {promise} returns a promise, resolved with message:answer
-     */
     value: function send(bot) {
-      var _this = this;
+      var _this2 = this;
 
       if (this._keyboard) {
         var reply_markup = JSON.stringify(this._keyboard.getProperties());
         this.properties.reply_markup = reply_markup;
       }
 
-      var messageId = undefined;
+      var messageId = void 0;
       return new Promise(function (resolve) {
-        bot.api[_this.method](_this.properties).then(function (response) {
+        bot.api[_this2.method](_this2.properties).then(function (response) {
           messageId = response.result.message_id;
-          _this.emit('message:sent', response);
+          _this2.emit('message:sent', response);
         });
 
-        if (_this._keyboard.one_time_keyboard) {
-          _this._keyboard.replyMarkup = '';
+        if (_this2._keyboard.one_time_keyboard) {
+          _this2._keyboard.replyMarkup = '';
         }
 
-        var chat = _this.properties.chat_id;
+        var chat = _this2.properties.chat_id;
         var answers = 0;
         bot.on('update', function listener(result) {
           answers += result.length;
@@ -98,18 +100,17 @@ var Base = (function (_EventEmitter) {
         });
       });
     }
-  }, {
-    key: 'getProperties',
 
     /**
      * Returns properties of the object
      * @return {object} properties of object
      */
+
+  }, {
+    key: 'getProperties',
     value: function getProperties() {
       return this.properties;
     }
-  }, {
-    key: 'setProperties',
 
     /**
      * Set properties of the object
@@ -120,8 +121,11 @@ var Base = (function (_EventEmitter) {
      *                         defaults to true
      * @return {object} returns the properties (same as getProperties)
      */
+
+  }, {
+    key: 'setProperties',
     value: function setProperties(object) {
-      var extend = arguments[1] === undefined ? true : arguments[1];
+      var extend = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
 
       this.properties = extend ? Object.assign(this.properties, object) : object;
 
@@ -130,7 +134,7 @@ var Base = (function (_EventEmitter) {
   }]);
 
   return Base;
-})(_events.EventEmitter);
+}(_events.EventEmitter);
 
-exports['default'] = Base;
+exports.default = Base;
 module.exports = exports['default'];

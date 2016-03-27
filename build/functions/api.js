@@ -1,17 +1,17 @@
-// API methods
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 var _fetch = require('./fetch');
 
 var _fetch2 = _interopRequireDefault(_fetch);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } } // API methods
+
 
 /**
  * API class, has a function for each method of the Telegram API which take
@@ -33,10 +33,11 @@ function API(token) {
   this.token = token;
 };
 
-exports['default'] = API;
+exports.default = API;
+
 
 API.prototype.request = function request(method, data) {
-  return (0, _fetch2['default'])(this.token + '/' + method, data);
+  return (0, _fetch2.default)(this.token + '/' + method, data);
 };
 
 var methods = ['getMe', 'sendMessage', 'forwardMessage', 'sendPhoto', 'sendAudio', 'sendDocument', 'sendSticker', 'sendVideo', 'sendLocation', 'sendChatAction', 'getUserProfilePhotos', 'getUpdates', 'setWebhook'];
