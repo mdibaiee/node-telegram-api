@@ -20,9 +20,7 @@ export default class BulkMessage extends Message {
    * @return {object} returns the message object
    */
   to(...args) {
-    const chats = args.reduce((a, b) => {
-      return a.concat(b);
-    }, []);
+    const chats = args.reduce((a, b) => a.concat(b), []);
 
     this.chats = chats;
     return this;

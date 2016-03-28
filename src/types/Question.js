@@ -15,7 +15,7 @@ export default class Question extends Message {
   constructor(options = {}) {
     super(options);
 
-    let kb = new Keyboard().force().oneTime().selective();
+    const kb = new Keyboard().force().oneTime().selective();
     this.keyboard(kb);
 
     this.answers(options.answers);
@@ -60,10 +60,10 @@ export default class Question extends Message {
       if (answer) {
         this.emit('question:answer', answer, message);
         return message;
-      } else {
-        this.emit('question:invalid', message);
-        throw message;
       }
+
+      this.emit('question:invalid', message);
+      throw message;
     });
   }
 }

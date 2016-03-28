@@ -8,6 +8,32 @@ const REQUIRED = 0;
 const OPTIONAL = 1;
 const REST = 2;
 
+function escape(symbols, append = '') {
+  return symbols.split('').map(symbol =>
+    (ESCAPABLE.indexOf(symbol) ? `\\${symbol}` : symbol) + append
+  ).join('');
+}
+
+const TYPES = {
+  number: '\\d',
+  word: '\\S'
+};
+
+function getFormat(type = 'word', param = 'required') {
+  const t = TYPES[type];
+
+  switch (param) { // eslint-disable-line
+    case 'required':
+      return `(${t}+)`;
+    case 'optional':
+      return `(${t}+)?`;
+    case 'rest':
+      return '(.*)';
+  }
+
+  return '';
+}
+
 /**
  * Parses a message for arguments, based on format
  *
@@ -41,74 +67,49 @@ export default function argumentParser(format, string) {
   format = format.replace(/[^\s]+/, '').trim();
 
   if (!format) {
-    return {args: {}, params: {}};
+    return { args: {}, params: {} };
   }
 
-  let indexes = [],
-      params = {};
+  let indexes = [];
+  const params = {};
 
   format = format.replace(/\s/g, '\\s*');
   format = format.replace(FORMAT_REQUIRED,
     (f, symbols, arg, type = 'word', offset) => {
-      indexes.push({arg, offset});
+      indexes.push({ arg, offset });
       params[arg] = REQUIRED;
       return (escape(symbols) + getFormat(type, 'required')).trim();
     });
   format = format.replace(FORMAT_OPTIONAL,
     (f, symbols, arg, type = 'word', offset) => {
-      indexes.push({arg, offset});
+      indexes.push({ arg, offset });
       params[arg] = OPTIONAL;
       return (escape(symbols, '?') + getFormat(type, 'optional')).trim();
     });
   format = format.replace(FORMAT_REST, (full, arg, offset) => {
-    indexes.push({offset, arg});
+    indexes.push({ offset, arg });
     params[arg] = REST;
     return getFormat(null, 'rest');
   });
 
   if (!string) {
-    return {args: {}, params};
+    return { args: {}, params };
   }
 
-  indexes = indexes.sort((a, b) => {
-    return a.offset < b.offset ? -1 : 1;
-  });
+  indexes = indexes.sort((a, b) =>
+    (a.offset < b.offset ? -1 : 1)
+  );
 
   const regex = new RegExp(format);
 
   const matched = regex.exec(string).slice(1);
 
   const object = {};
-  for (let [index, match] of matched.entries()) {
+  for (const [index, match] of matched.entries()) {
     const argument = indexes[index];
 
     object[argument.arg] = match;
   }
 
-  return {args: object, params};
-}
-
-function escape(symbols, append = '') {
-  return symbols.split('').map(symbol => {
-    return (ESCAPABLE.indexOf(symbol) ? `\\${symbol}` : symbol) + append;
-  }).join('');
-}
-
-
-const TYPES = {
-  'number': '\\d',
-  'word': '\\S'
-};
-
-function getFormat(type = 'word', param = 'required') {
-  const t = TYPES[type];
-
-  switch (param) {
-    case 'required':
-      return `(${t}+)`;
-    case 'optional':
-      return `(${t}+)?`;
-    case 'rest':
-      return `(.*)`;
-  }
+  return { args: object, params };
 }

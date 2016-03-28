@@ -1,59 +1,13 @@
 {
+  "parser": "babel-eslint",
+  "extends": "airbnb/base",
+  "root": true,
   "env": {
-    "es6": true,
-    "browser": true
-  },
-  "ecmaFeatures": {
-    "modules": true
-  },
-  "globals": {
-    "exports": true,
-    "require": true,
-    "ViewHelpers": true,
-    "is": true,
-    "Components": true,
-    "XPCOMUtils": true,
-    "EventEmitter": true,
-    "add_task": true,
-    "info": true,
-    "createHost": true,
-    "promiseTab": true,
-    "ok": true,
-    "TEST_URI_ROOT": true,
-    "TargetFactory": true,
-    "gBrowser": true,
-    "gDevTools": true
+		"node": true
   },
   "rules": {
-    "comma-dangle": [2, "never"],
-    "no-underscore-dangle": 0,
-    "no-cond-assign": 0,
-    "no-undef": 0,
-    "no-console": 0,
-    "no-reserved-keys": 2,
-    "valid-jsdoc": [2, {
-      "requireReturn": false,
-      "requireParamDescription": false,
-      "requireReturnDescription": false
-    }],
-    "max-len": [1, 80],
-    "no-use-before-define": 0,
-    "no-self-compare": 1,
-    "no-sequences": 0,
-    "radix": 2,
-    "wrap-iife": 2,
-    "indent": [2, 2],
-    "brace-style": [2, "1tbs"],
-    "comma-style": [2, "last"],
-    "no-lonely-if": 2,
-    "no-multiple-empty-lines": [2, {"max": 2}],
-    "quotes": 0,
-    "space-after-keywords": [2, "always"],
-    "space-before-blocks": [2, "always"],
-    "space-infix-ops": [2, { "int32Hint": false }],
-    "strict": 0,
-    "global-strict": 0,
-    "no-new": 0,
-    "camelcase": 0
+    "comma-dangle": 0,
+    "no-param-reassign": 0,
+    "no-console": 0
   }
 }

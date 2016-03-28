@@ -3,7 +3,7 @@ import API from './functions/api';
 import webhook from './functions/webhook';
 import poll from './functions/poll';
 import argumentParser from './functions/argument-parser';
-import {EventEmitter} from 'events';
+import { EventEmitter } from 'events';
 import Message from './types/Message';
 import File from './types/File';
 import Keyboard from './types/Keyboard';
@@ -31,7 +31,7 @@ export default class Bot extends EventEmitter {
    * Create and connect to a new bot
    * @param  {object} options Bot properties.
    */
-  constructor(options = {update: {}}) {
+  constructor(options = { update: {} }) {
     super();
 
     if (!options.token) {
@@ -80,9 +80,9 @@ export default class Bot extends EventEmitter {
 
       if (hook) {
         return webhook(hook, this);
-      } else {
-        return poll(this);
       }
+
+      return poll(this);
     });
   }
 
@@ -182,7 +182,7 @@ export default class Bot extends EventEmitter {
         res.message.text = text;
       }
 
-      let ev = this._userEvents.find(({pattern}) => pattern.test(text));
+      const ev = this._userEvents.find(({ pattern }) => pattern.test(text));
 
       if (!ev) {
         this.emit('command-notfound', res.message);
@@ -194,12 +194,12 @@ export default class Bot extends EventEmitter {
         return;
       }
 
-      let {params, args} = ev.parse(res.message.text);
+      const { params, args } = ev.parse(res.message.text);
       res.message.args = args;
 
-      const requiredParams = Object.keys(params).filter(param => {
-        return params[param] === REQUIRED && !args[param];
-      });
+      const requiredParams = Object.keys(params).filter(param =>
+        params[param] === REQUIRED && !args[param]
+      );
 
       if (!requiredParams.length) {
         ev.listener(res.message);
@@ -208,7 +208,7 @@ export default class Bot extends EventEmitter {
 
       const bot = this;
       function* getAnswer() {
-        for (let param of requiredParams) {
+        for (const param of requiredParams) {
           const msg = new Message().to(res.message.chat.id)
                                    .text(`Enter value for ${param}`);
           yield bot.send(msg).then(answer => {

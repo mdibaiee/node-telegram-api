@@ -1,4 +1,4 @@
-import {EventEmitter} from 'events';
+import { EventEmitter } from 'events';
 
 const ANSWER_THRESHOLD = 10;
 
@@ -29,8 +29,8 @@ export default class Base extends EventEmitter {
    */
   send(bot) {
     if (this._keyboard) {
-      const reply_markup = JSON.stringify(this._keyboard.getProperties());
-      this.properties.reply_markup = reply_markup;
+      const replyMarkup = JSON.stringify(this._keyboard.getProperties());
+      this.properties.reply_markup = replyMarkup;
     }
 
     let messageId;
@@ -49,15 +49,15 @@ export default class Base extends EventEmitter {
       bot.on('update', function listener(result) {
         answers += result.length;
 
-        const update = result.find(({message}) => {
+        const update = result.find(({ message }) => {
           // if in a group, there will be a reply to this message
           if (chat < 0) {
             return message.chat.id === chat
                    && message.reply_to_message
                    && message.reply_to_message.message_id === messageId;
-          } else {
-            return message.chat.id === chat;
           }
+
+          return message.chat.id === chat;
         });
 
         if (update) {

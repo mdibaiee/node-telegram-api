@@ -20,7 +20,7 @@ export default class API {
 }
 
 API.prototype.request = function request(method, data) {
-  return fetch(this.token + '/' + method, data);
+  return fetch(`${this.token}/${method}`, data);
 };
 
 const methods = ['getMe', 'sendMessage', 'forwardMessage', 'sendPhoto',
@@ -29,7 +29,7 @@ const methods = ['getMe', 'sendMessage', 'forwardMessage', 'sendPhoto',
 'getUpdates', 'setWebhook'];
 
 methods.forEach(method => {
-  API.prototype[method] = function(data) {
+  API.prototype[method] = function(data) { //eslint-disable-line
     return this.request(method, data);
   };
 });

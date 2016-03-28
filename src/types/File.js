@@ -37,12 +37,12 @@ export default class File extends Base {
    */
   file(file, fileType) {
     if (fileType) {
-      this.properties[fileType] = {file: file};
+      this.properties[fileType] = { file };
 
       return this;
     }
 
-    let [type, extension] = mime.lookup(file).split('/');
+    let [type, extension] = mime.lookup(file).split('/'); // eslint-disable-line
     if (type === 'image') {
       type = 'photo';
     }
@@ -55,7 +55,7 @@ export default class File extends Base {
       type = 'document';
     }
 
-    this.properties[type] = {file: file};
+    this.properties[type] = { file };
 
     this.method = `send${type[0].toUpperCase() + type.slice(1)}`;
 

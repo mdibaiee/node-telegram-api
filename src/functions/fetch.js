@@ -4,14 +4,14 @@ export default function fetch(path, data = {}) {
   return new Promise((resolve, reject) => {
     const files = {};
 
-    for (let key of Object.keys(data)) {
+    for (const key of Object.keys(data)) {
       if (data[key].file) {
         files[key] = data[key].file;
         delete data[key];
       }
     }
 
-    unirest.post('https://api.telegram.org/bot' + path)
+    unirest.post(`https://api.telegram.org/bot${path}`)
     .field(data)
     .attach(files)
     .end(response => {
