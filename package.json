@@ -26,7 +26,7 @@
     "build"
   ],
   "directories": {
-    "lib": "lib"
+    "lib": "src"
   },
   "engines": {
     "node": ">=0.12.0"
