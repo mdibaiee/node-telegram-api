@@ -23,8 +23,7 @@
   },
   "files": [
     "types",
-    "build",
-    "index.js"
+    "build"
   ],
   "directories": {
     "lib": "lib"
