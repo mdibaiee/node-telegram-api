@@ -20,6 +20,10 @@ If you are looking for a real-life example of a bot written using this module, s
 Example
 =======
 ```javascript
+// ES6:
+import Bot, { Message, File } from 'telegram-api';
+
+// ES5:
 var Bot = require('telegram-api');
 var Message = require('telegram-api/types/Message');
 var File = require('telegram-api/types/File');
