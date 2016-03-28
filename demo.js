@@ -1,4 +1,4 @@
-var Bot = require('telegram-api');
+var Bot = require('telegram-api').default;
 
 // only require the message types you need, more coming soon!
 var Message = require('telegram-api/types/Message');

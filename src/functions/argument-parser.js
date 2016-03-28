@@ -40,7 +40,9 @@ export default function argumentParser(format, string) {
   string = string.replace(/[^\s]+/, '').trim();
   format = format.replace(/[^\s]+/, '').trim();
 
-  if (!format) return {args: {}, params: {}};
+  if (!format) {
+    return {args: {}, params: {}};
+  }
 
   let indexes = [],
       params = {};
@@ -64,7 +66,9 @@ export default function argumentParser(format, string) {
     return getFormat(null, 'rest');
   });
 
-  if (!string) return {args: {}, params};
+  if (!string) {
+    return {args: {}, params};
+  }
 
   indexes = indexes.sort((a, b) => {
     return a.offset < b.offset ? -1 : 1;
