@@ -24,7 +24,7 @@ Example
 import Bot, { Message, File } from 'telegram-api';
 
 // ES5:
-var Bot = require('telegram-api');
+var Bot = require('telegram-api').default;
 var Message = require('telegram-api/types/Message');
 var File = require('telegram-api/types/File');
 
