@@ -1,4 +1,6 @@
-import 'babel-polyfill';
+if (!window._babelPolyfill) {
+  require('babel-polyfill');
+}
 import API from './functions/api';
 import webhook from './functions/webhook';
 import poll from './functions/poll';
