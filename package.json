@@ -1,6 +1,6 @@
 {
   "name": "telegram-api",
-  "version": "0.7.2",
+  "version": "0.7.4",
   "description": "Control Telegram bots easily using the new Telegram API",
   "main": "build/index.js",
   "scripts": {
