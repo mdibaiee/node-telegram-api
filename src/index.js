@@ -1,4 +1,4 @@
-if (!window._babelPolyfill) {
+if (!global._babelPolyfill) {
   require('babel-polyfill');
 }
 import API from './functions/api';
