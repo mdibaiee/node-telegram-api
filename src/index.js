@@ -170,7 +170,8 @@ export default class Bot extends EventEmitter {
     }
 
     update.forEach(res => {
-      let text = res.message.text;
+      const msg = res.message || res.edited_message;
+      let text = msg.text;
       if (!text) {
         return;
       }
@@ -181,39 +182,39 @@ export default class Bot extends EventEmitter {
         // Commands are sent in /command@thisusername format in groups
         const regex = new RegExp(`(/.*)@${this.info.username}`);
         text = text.replace(regex, '$1');
-        res.message.text = text;
+        msg.text = text;
       }
 
       const ev = this._userEvents.find(({ pattern }) => pattern.test(text));
 
       if (!ev) {
-        this.emit('command-notfound', res.message);
+        this.emit('command-notfound', msg);
         return;
       }
 
       if (!ev.parse) {
-        ev.listener(res.message);
+        ev.listener(msg);
         return;
       }
 
-      const { params, args } = ev.parse(res.message.text);
-      res.message.args = args;
+      const { params, args } = ev.parse(msg.text);
+      msg.args = args;
 
       const requiredParams = Object.keys(params).filter(param =>
         params[param] === REQUIRED && !args[param]
       );
 
       if (!requiredParams.length) {
-        ev.listener(res.message);
+        ev.listener(msg);
         return;
       }
 
       const bot = this;
       function* getAnswer() {
         for (const param of requiredParams) {
-          const msg = new Message().to(res.message.chat.id)
+          const ga = new Message().to(msg.chat.id)
                                    .text(`Enter value for ${param}`);
-          yield bot.send(msg).then(answer => {
+          yield bot.send(ga).then(answer => {
             args[param] = answer.text;
           });
         }
@@ -223,7 +224,7 @@ export default class Bot extends EventEmitter {
       (function loop() {
         const next = iterator.next();
         if (next.done) {
-          ev.listener(res.message);
+          ev.listener(msg);
           return;
         }
 
