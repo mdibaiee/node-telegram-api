@@ -170,7 +170,7 @@ export default class Bot extends EventEmitter {
     }
 
     update.forEach(res => {
-      const msg = res.message || res.edited_message;
+      const msg = res.message || res.edited_message || res.channel_post;
       let text = msg.text;
       if (!text) {
         return;
