@@ -56,6 +56,7 @@ Bots using this module
 ======================
 
 [@webdevrobot](https://telegram.me/webdevrobot) => [mdibaiee/webdevrobot](https://github.com/mdibaiee/webdevrobot)
+[@metagon_bot](https://telegram.me/metagon_bot) => [austinhuang0131/metagon](https://github.com/austinhuang0131/metagon)
 
 Todo
 ====
