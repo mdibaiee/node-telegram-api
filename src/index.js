@@ -117,7 +117,7 @@ export default class Bot extends EventEmitter {
    *                           gets the update
    * @return {object} returns the bot object
    */
-  command(command, listener) {
+  command(command, listener, customMessage = {}) {
     const regex = /[^\s]+/;
 
     const cmd = command.match(regex)[0].trim();
@@ -125,7 +125,8 @@ export default class Bot extends EventEmitter {
     this._userEvents.push({
       pattern: new RegExp(`^/${cmd}`),
       parse: argumentParser.bind(null, command),
-      listener
+      listener,
+      customMessage
     });
 
     return this;
@@ -211,9 +212,12 @@ export default class Bot extends EventEmitter {
 
       const bot = this;
       function* getAnswer() {
+        const customMessage = ev.customMessage;
+
         for (const param of requiredParams) {
-          const ga = new Message().to(msg.chat.id)
-                                   .text(`Enter value for ${param}`);
+          const ga = new Message()
+                      .to(msg.chat.id)
+                      .text(customMessage[param] || `Enter value for ${param}`);
           yield bot.send(ga).then(answer => {
             args[param] = answer.text;
           });
