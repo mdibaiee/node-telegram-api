@@ -215,13 +215,9 @@ export default class Bot extends EventEmitter {
         const customMessage = ev.customMessage;
 
         for (const param of requiredParams) {
-          let ga;
-          if (customMessage[param]) {
-            ga = new Message().to(msg.chat.id).text(customMessage[param]);
-          } else {
-            ga = new Message().to(msg.chat.id)
-                              .text(`Enter value for ${param}`);
-          }
+          const ga = new Message()
+                      .to(msg.chat.id)
+                      .text(customMessage[param] || `Enter value for ${param}`);
           yield bot.send(ga).then(answer => {
             args[param] = answer.text;
           });
