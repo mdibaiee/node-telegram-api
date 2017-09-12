@@ -220,7 +220,7 @@ export default class Bot extends EventEmitter {
             ga = new Message().to(msg.chat.id).text(customMessage[param]);
           } else {
             ga = new Message().to(msg.chat.id)
-                                    .text(`Enter value for ${param}`);
+                              .text(`Enter value for ${param}`);
           }
           yield bot.send(ga).then(answer => {
             args[param] = answer.text;
