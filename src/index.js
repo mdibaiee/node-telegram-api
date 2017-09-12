@@ -117,12 +117,7 @@ export default class Bot extends EventEmitter {
    *                           gets the update
    * @return {object} returns the bot object
    */
-  command(command, customMessage, listener) {
-    if (!listener) {
-      listener = customMessage;
-      customMessage = {};
-    }
-
+  command(command, listener, customMessage = {}) {
     const regex = /[^\s]+/;
 
     const cmd = command.match(regex)[0].trim();
@@ -130,8 +125,8 @@ export default class Bot extends EventEmitter {
     this._userEvents.push({
       pattern: new RegExp(`^/${cmd}`),
       parse: argumentParser.bind(null, command),
-      customMessage,
-      listener
+      listener,
+      customMessage
     });
 
     return this;
