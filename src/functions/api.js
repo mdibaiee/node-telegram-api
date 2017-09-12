@@ -26,7 +26,7 @@ API.prototype.request = function request(method, data) {
 const methods = ['getMe', 'sendMessage', 'forwardMessage', 'sendPhoto',
 'sendAudio', 'sendDocument', 'sendSticker', 'sendVideo',
 'sendLocation', 'sendChatAction', 'getUserProfilePhotos',
-'getUpdates', 'setWebhook'];
+'getUpdates', 'setWebhook', 'deleteMessage'];
 
 methods.forEach(method => {
   API.prototype[method] = function(data) { //eslint-disable-line
