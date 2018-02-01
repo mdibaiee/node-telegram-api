@@ -57,7 +57,7 @@ export default class Base extends EventEmitter {
                    && message.reply_to_message.message_id === messageId;
           }
 
-          return message.chat.id === chat;
+          return message && message.chat.id === chat;
         });
 
         if (update) {
