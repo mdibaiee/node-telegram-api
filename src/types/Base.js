@@ -34,11 +34,11 @@ export default class Base extends EventEmitter {
     }
 
     let messageId;
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       bot.api[this.method](this.properties).then(response => {
         messageId = response.result.message_id;
         this.emit('message:sent', response);
-      });
+      }).catch(reject);
 
       if (this._keyboard.one_time_keyboard) {
         this._keyboard.replyMarkup = '';
