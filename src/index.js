@@ -138,7 +138,7 @@ export default class Bot extends EventEmitter {
    * @return {unknown} returns the result of calling message's send method
    */
   send(message) {
-    return message.send(this).catch(console.error);
+    return message.send(this);
   }
 
   /**
