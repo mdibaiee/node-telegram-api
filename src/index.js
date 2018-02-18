@@ -75,17 +75,22 @@ export default class Bot extends EventEmitter {
     if (hook) {
       return webhook(hook, this);
     }
-    return this.api.getMe().then(response => {
-      this.info = response.result;
+    return this.api.getMe()
+      .then(response => {
+        this.info = response.result;
 
-      this.on('update', this._update);
+        this.on('update', this._update);
 
-      if (hook) {
-        return webhook(hook, this);
-      }
+        if (hook) {
+          return webhook(hook, this);
+        }
 
-      return poll(this);
-    });
+        return poll(this);
+      })
+      .catch(e => {
+        this.emit('error', e);
+        throw e;
+      });
   }
 
   /**
@@ -138,7 +143,11 @@ export default class Bot extends EventEmitter {
    * @return {unknown} returns the result of calling message's send method
    */
   send(message) {
-    return message.send(this);
+    return message.send(this)
+      .catch(e => {
+        this.emit('error', e);
+        throw e;
+      });
   }
 
   /**

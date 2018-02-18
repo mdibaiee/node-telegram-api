@@ -11,7 +11,8 @@ export default function poll(bot) {
         }
         return poll(bot);
       })
-      .catch(() => {
+      .catch(e => {
+        bot.emit('error', e);
         return poll(bot);
       });
 }
