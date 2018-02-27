@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events';
 
 const ANSWER_THRESHOLD = 10;
+const MSG_MAX_LENGTH = 4096;
 
 /**
  * Base class of all classes
@@ -35,7 +36,22 @@ export default class Base extends EventEmitter {
 
     let messageId;
     return new Promise((resolve, reject) => {
-      bot.api[this.method](this.properties).then(response => {
+      let promiseChain;
+
+      if (this.method === 'sendMessage' && this.properties.text.length > MSG_MAX_LENGTH) {
+        promiseChain = Promise.resolve();
+        const textChunks = this.properties.text.match(new RegExp(`.{1,${MSG_MAX_LENGTH}}`, 'g'));
+
+        textChunks.forEach(chunk => {
+          const properties = Object.assign({}, this.properties, { text: chunk });
+          delete properties.parse_mode; // any unclosed tags, text modifiers will not send out, send as pure text
+          promiseChain = promiseChain.then(() => bot.api[this.method](properties));
+        });
+      } else {
+        promiseChain = bot.api[this.method](this.properties);
+      }
+
+      promiseChain.then(response => {
         messageId = response.result.message_id;
         this.emit('message:sent', response);
       }).catch(reject);
