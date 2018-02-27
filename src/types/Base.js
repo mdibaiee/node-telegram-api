@@ -1,7 +1,6 @@
 import { EventEmitter } from 'events';
 
 const ANSWER_THRESHOLD = 10;
-const MSG_MAX_LENGTH = 4096;
 
 /**
  * Base class of all classes
@@ -36,25 +35,12 @@ export default class Base extends EventEmitter {
 
     let messageId;
     return new Promise((resolve, reject) => {
-      let promiseChain;
-
-      if (this.method === 'sendMessage' && this.properties.text.length > MSG_MAX_LENGTH) {
-        promiseChain = Promise.resolve();
-        const textChunks = this.properties.text.match(new RegExp(`.{1,${MSG_MAX_LENGTH}}`, 'g'));
-
-        textChunks.forEach(chunk => {
-          const properties = Object.assign({}, this.properties, { text: chunk });
-          delete properties.parse_mode; // any unclosed tags, text modifiers will not send out, send as pure text
-          promiseChain = promiseChain.then(() => bot.api[this.method](properties));
-        });
-      } else {
-        promiseChain = bot.api[this.method](this.properties);
-      }
-
-      promiseChain.then(response => {
-        messageId = response.result.message_id;
-        this.emit('message:sent', response);
-      }).catch(reject);
+      this._apiSend(bot)
+        .then(response => {
+          messageId = response.result.message_id;
+          this.emit('message:sent', response);
+        })
+        .catch(reject);
 
       if (this._keyboard.one_time_keyboard) {
         this._keyboard.replyMarkup = '';
@@ -62,6 +48,7 @@ export default class Base extends EventEmitter {
 
       const chat = this.properties.chat_id;
       let answers = 0;
+
       bot.on('update', function listener(result) {
         answers += result.length;
 
@@ -69,8 +56,8 @@ export default class Base extends EventEmitter {
           // if in a group, there will be a reply to this message
           if (chat < 0) {
             return message.chat.id === chat
-                   && message.reply_to_message
-                   && message.reply_to_message.message_id === messageId;
+              && message.reply_to_message
+              && message.reply_to_message.message_id === messageId;
           }
 
           return message && message.chat.id === chat;
@@ -78,9 +65,7 @@ export default class Base extends EventEmitter {
 
         if (update) {
           resolve(update.message);
-
           this.emit('message:answer', update.message);
-
           bot.removeListener('update', listener);
         }
 
@@ -89,6 +74,10 @@ export default class Base extends EventEmitter {
         }
       });
     });
+  }
+
+  _apiSend(bot) {
+    return bot.api[this.method](this.properties);
   }
 
   /**

@@ -1,5 +1,18 @@
 import Base from './Base';
 
+const MSG_MAX_LENGTH = 4096;
+
+function splitToChunks(str, size) {
+  const numChunks = Math.ceil(str.length / size);
+  const chunks = new Array(numChunks);
+
+  for (let i = 0, o = 0; i < numChunks; ++i, o += size) {
+    chunks[i] = str.substr(o, size);
+  }
+
+  return chunks;
+}
+
 /**
  * Message class, used to send message to a chat
  */
@@ -91,6 +104,26 @@ export default class Message extends Base {
   keyboard(kb) {
     this._keyboard = kb;
     return this;
+  }
+
+  // override Base.prototype._apiSend() method
+  _apiSend(bot) {
+    if (this.properties.text && this.properties.text.length > MSG_MAX_LENGTH) {
+      let promiseChain = Promise.resolve();
+      const textChunks = splitToChunks(this.properties.text, MSG_MAX_LENGTH);
+
+      textChunks.forEach(chunk => {
+        const properties = Object.assign({}, this.properties, { text: chunk });
+        // any unclosed tags, text modifiers will not send out, send as pure text
+        delete properties.parse_mode;
+
+        promiseChain = promiseChain.then(() => bot.api[this.method](properties));
+      });
+
+      return promiseChain;
+    }
+
+    return bot.api[this.method](this.properties);
   }
 
   // This class inherits Base's send method
