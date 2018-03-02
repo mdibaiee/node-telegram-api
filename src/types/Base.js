@@ -35,10 +35,12 @@ export default class Base extends EventEmitter {
 
     let messageId;
     return new Promise((resolve, reject) => {
-      bot.api[this.method](this.properties).then(response => {
-        messageId = response.result.message_id;
-        this.emit('message:sent', response);
-      }).catch(reject);
+      this._apiSend(bot)
+        .then(response => {
+          messageId = response.result.message_id;
+          this.emit('message:sent', response);
+        })
+        .catch(reject);
 
       if (this._keyboard.one_time_keyboard) {
         this._keyboard.replyMarkup = '';
@@ -46,6 +48,7 @@ export default class Base extends EventEmitter {
 
       const chat = this.properties.chat_id;
       let answers = 0;
+
       bot.on('update', function listener(result) {
         answers += result.length;
 
@@ -53,8 +56,8 @@ export default class Base extends EventEmitter {
           // if in a group, there will be a reply to this message
           if (chat < 0) {
             return message.chat.id === chat
-                   && message.reply_to_message
-                   && message.reply_to_message.message_id === messageId;
+              && message.reply_to_message
+              && message.reply_to_message.message_id === messageId;
           }
 
           return message && message.chat.id === chat;
@@ -62,9 +65,7 @@ export default class Base extends EventEmitter {
 
         if (update) {
           resolve(update.message);
-
           this.emit('message:answer', update.message);
-
           bot.removeListener('update', listener);
         }
 
@@ -73,6 +74,10 @@ export default class Base extends EventEmitter {
         }
       });
     });
+  }
+
+  _apiSend(bot) {
+    return bot.api[this.method](this.properties);
   }
 
   /**
