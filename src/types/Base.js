@@ -25,7 +25,7 @@ export default class Base extends EventEmitter {
    *				                 gets the Update object containing message
    *
    * @param  {object} bot
-   * @return {promise} returns a promise, resolved with message:answer
+   * @return {Promise} returns a promise, resolved with message:answer
    */
   send(bot) {
     if (this._keyboard) {
@@ -33,46 +33,47 @@ export default class Base extends EventEmitter {
       this.properties.reply_markup = replyMarkup;
     }
 
-    let messageId;
     return new Promise((resolve, reject) => {
       this._apiSend(bot)
         .then(response => {
-          messageId = response.result.message_id;
           this.emit('message:sent', response);
+          return response.result.message_id;
         })
-        .catch(reject);
+        .then(messageId => {
+          const chat = this.properties.chat_id;
+          let answers = 0;
 
-      if (this._keyboard.one_time_keyboard) {
-        this._keyboard.replyMarkup = '';
-      }
+          bot.on('update', function listener(result) {
+            answers += result.length;
 
-      const chat = this.properties.chat_id;
-      let answers = 0;
+            const update = result.find(({ message }) => {
+              // if in a group, there will be a reply to this message
+              if (chat < 0) {
+                return message.chat.id === chat
+                  && message.reply_to_message
+                  && message.reply_to_message.message_id === messageId;
+              }
 
-      bot.on('update', function listener(result) {
-        answers += result.length;
+              return message && message.chat.id === chat;
+            });
 
-        const update = result.find(({ message }) => {
-          // if in a group, there will be a reply to this message
-          if (chat < 0) {
-            return message.chat.id === chat
-              && message.reply_to_message
-              && message.reply_to_message.message_id === messageId;
+            if (update) {
+              resolve(update.message);
+              this.emit('message:answer', update.message);
+              bot.removeListener('update', listener);
+            }
+
+            if (answers >= ANSWER_THRESHOLD) {
+              bot.removeListener('update', listener);
+            }
+          });
+        })
+        .catch(reject)
+        .finally(() => {
+          if (this._keyboard.one_time_keyboard) {
+            this._keyboard.replyMarkup = '';
           }
-
-          return message && message.chat.id === chat;
         });
-
-        if (update) {
-          resolve(update.message);
-          this.emit('message:answer', update.message);
-          bot.removeListener('update', listener);
-        }
-
-        if (answers >= ANSWER_THRESHOLD) {
-          bot.removeListener('update', listener);
-        }
-      });
     });
   }
 
