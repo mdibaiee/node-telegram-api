@@ -66,17 +66,9 @@ const methods = ['getMe', 'sendMessage', 'forwardMessage', 'sendPhoto',
 methods.forEach(method => {
   API.prototype[method] = function (data) { //eslint-disable-line
     // implementation taken from https://github.com/yagop/node-telegram-bot-api/issues/192#issuecomment-249488807
-    let resolve;
-    let reject;
-
-    const promise = new Promise((_resolve, _reject) => {
-      resolve = _resolve;
-      reject = _reject;
+    return new Promise((resolve, reject) => {
+      this._queue.push({ method, data, resolve, reject });
+      process.nextTick(this._runQueue.bind(this));
     });
-
-    this._queue.push({ method, data, resolve, reject });
-    process.nextTick(this._runQueue.bind(this));
-
-    return promise;
   };
 });
