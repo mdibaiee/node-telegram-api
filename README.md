@@ -14,8 +14,7 @@ If you are cloning this repository, remember to run `npm install` to install dep
 
 If you are looking for a real-life example of a bot written using this module, see [mdibaiee/webdevrobot](https://github.com/mdibaiee/webdevrobot).
 
-[Documentation](https://github.com/mdibaiee/node-telegram-api/wiki)
-==============
+[**Documentation**](https://github.com/mdibaiee/node-telegram-api/wiki)
 
 Example
 =======
@@ -51,12 +50,6 @@ bot.command('weather <city> [date]', function(message) {
   console.log(message.args.city, message.args.date);
 })
 ```
-
-Bots using this module
-======================
-
-[@webdevrobot](https://telegram.me/webdevrobot) => [mdibaiee/webdevrobot](https://github.com/mdibaiee/webdevrobot)
-[@metagon_bot](https://telegram.me/metagon_bot) => [austinhuang0131/metagon](https://github.com/austinhuang0131/metagon)
 
 Todo
 ====
