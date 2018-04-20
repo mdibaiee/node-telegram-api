@@ -66,7 +66,8 @@ const methods = ['getMe', 'sendMessage', 'forwardMessage', 'sendPhoto',
 methods.forEach(method => {
   API.prototype[method] = function (data) { //eslint-disable-line
     if (method === 'getUpdates') {
-      // don't add 'getUpdates' request to the queue as it's going to hinder 'send*' calls performance
+      // don't add 'getUpdates' request to the queue as it's going to
+      // hinder 'send*' calls performance
       return this.request(method, data);
     }
 
