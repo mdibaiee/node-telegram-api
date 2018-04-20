@@ -65,6 +65,11 @@ const methods = ['getMe', 'sendMessage', 'forwardMessage', 'sendPhoto',
 
 methods.forEach(method => {
   API.prototype[method] = function (data) { //eslint-disable-line
+    if (method === 'getUpdates') {
+      // don't add 'getUpdates' request to the queue as it's going to hinder 'send*' calls performance
+      return this.request(method, data);
+    }
+
     // implementation taken from https://github.com/yagop/node-telegram-bot-api/issues/192#issuecomment-249488807
     return new Promise((resolve, reject) => {
       this._queue.push({ method, data, resolve, reject });
