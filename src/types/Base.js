@@ -25,9 +25,10 @@ export default class Base extends EventEmitter {
    *				                 gets the Update object containing message
    *
    * @param  {object} bot
+   * @param {boolean} expectAnswer whether a sent message expects an answer from a contact(s)
    * @return {Promise} returns a promise, resolved with message:answer
    */
-  send(bot) {
+  send(bot, expectAnswer = false) {
     if (this._keyboard) {
       const replyMarkup = JSON.stringify(this._keyboard.getProperties());
       this.properties.reply_markup = replyMarkup;
@@ -40,6 +41,11 @@ export default class Base extends EventEmitter {
           return response.result.message_id;
         })
         .then(messageId => {
+          if (!expectAnswer) {
+            // no need to add more event callbacks for the messages that don't need expect an answer
+            return resolve();
+          }
+
           const chat = this.properties.chat_id;
           let answers = 0;
 
@@ -67,6 +73,8 @@ export default class Base extends EventEmitter {
               bot.removeListener('update', listener);
             }
           });
+
+          return void 0;
         })
         .catch(reject)
         .finally(() => {
