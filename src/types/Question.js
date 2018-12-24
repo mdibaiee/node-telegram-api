@@ -44,9 +44,8 @@ export default class Question extends Message {
    */
   send(bot) {
     const answers = this._answers;
-    const expectAnswer = true;
 
-    return super.send(bot, expectAnswer).then(message => {
+    return super.send(bot).then(message => {
       let answer;
 
       answers.forEach(function find(a) {
