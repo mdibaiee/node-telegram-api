@@ -82,6 +82,15 @@ export default class Base extends EventEmitter {
   }
 
   /**
+   * Set disable_notification property to true (send a silent notification)
+   * @returns {object} returns the message object
+   */
+  disableNotification() {
+    this.properties.disable_notification = true;
+    return this;
+  }
+
+  /**
    * Returns properties of the object
    * @return {object} properties of object
    */
